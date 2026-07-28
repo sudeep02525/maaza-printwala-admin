@@ -81,7 +81,7 @@ export default function AdminSidebar() {
             </div>
             <div className="min-w-0">
               <p className="text-sm font-medium text-white truncate">{user?.name || 'Administrator'}</p>
-              <p className="text-xs text-slate-400 truncate">{user?.email || 'admin@maazaprintwala.demo'}</p>
+              <p className="text-xs text-slate-400 truncate">{user?.email || 'admin@maazaprintwala.com'}</p>
             </div>
           </div>
           <button

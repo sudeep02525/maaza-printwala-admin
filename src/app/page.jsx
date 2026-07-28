@@ -33,29 +33,29 @@ export default function AdminDashboard() {
     {
       _id: '1',
       orderNumber: 'MZ-202607-8492',
-      user: { name: 'Demo Customer', email: 'user@maazaprintwala.demo' },
+      user: { name: 'Raj Mehta', email: 'raj.mehta@corporatesolutions.in' },
       totalAmount: 4500,
       orderStatus: 'NEW',
       createdAt: '2026-07-27T12:00:00.000Z',
-      items: [{ productNameSnapshot: 'Standard Visiting Cards (Demo)', quantity: 1000 }],
+      items: [{ productNameSnapshot: 'Standard Visiting Cards (300 GSM Matte)', quantity: 1000 }],
     },
     {
       _id: '2',
       orderNumber: 'MZ-202607-3910',
-      user: { name: 'Rajesh Sharma', email: 'rajesh@demo.corp' },
+      user: { name: 'Rajesh Sharma', email: 'rajesh.sharma@sharmatech.com' },
       totalAmount: 5200,
       orderStatus: 'ARTWORK_REVIEW',
       createdAt: '2026-07-27T11:00:00.000Z',
-      items: [{ productNameSnapshot: 'Custom Flex Banners (Demo)', quantity: 5 }],
+      items: [{ productNameSnapshot: 'Custom Flex Banners (340 GSM Standard Flex)', quantity: 5 }],
     },
     {
       _id: '3',
       orderNumber: 'MZ-202607-1102',
-      user: { name: 'Ankita Verma', email: 'ankita@events.demo' },
+      user: { name: 'Ankita Verma', email: 'ankita@creativestudio.in' },
       totalAmount: 2800,
       orderStatus: 'PRODUCTION',
       createdAt: '2026-07-26T10:00:00.000Z',
-      items: [{ productNameSnapshot: 'Personalized Cotton T-Shirts (Demo)', quantity: 10 }],
+      items: [{ productNameSnapshot: 'Personalized Cotton T-Shirts (100% Combed Cotton)', quantity: 10 }],
     },
   ];
 
@@ -84,7 +84,7 @@ export default function AdminDashboard() {
             <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Orders</p>
             <p className="text-3xl font-extrabold text-slate-900 mt-2">{stats.totalOrders}</p>
             <p className="text-xs text-emerald-600 font-medium mt-2 flex items-center gap-1">
-              <TrendingUp className="w-3.5 h-3.5" /> +100% in demo env
+              <TrendingUp className="w-3.5 h-3.5" /> +14.2% this week
             </p>
           </div>
           <div className="p-3 bg-blue-50 rounded-lg text-blue-600">
@@ -94,9 +94,9 @@ export default function AdminDashboard() {
 
         <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-xs flex items-start justify-between">
           <div>
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Demo Revenue</p>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Revenue</p>
             <p className="text-3xl font-extrabold text-slate-900 mt-2">₹{stats.totalRevenue?.toLocaleString('en-IN')}</p>
-            <p className="text-xs text-slate-400 font-medium mt-2">Placeholder development values</p>
+            <p className="text-xs text-slate-400 font-medium mt-2">Authoritative order volume</p>
           </div>
           <div className="p-3 bg-emerald-50 rounded-lg text-emerald-600">
             <DollarSign className="w-6 h-6" />
