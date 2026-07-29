@@ -165,7 +165,7 @@ export default function AdminDashboardPage() {
           </span>
           <h3 className="text-xl font-black text-white">Live Press Production &amp; Artwork Verification Center</h3>
           <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
-            Review uploaded customer DPI print artwork, verify CMYK color profiles, approve proofs, and assign jobs to press machines for timely nationwide dispatch.
+            Review uploaded customer print artwork boundaries, verify safe-zone alignment, approve proofs, and assign jobs to press machines for timely dispatch.
           </p>
         </div>
         <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto shrink-0">
