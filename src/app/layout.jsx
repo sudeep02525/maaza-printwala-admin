@@ -4,7 +4,7 @@ import AdminSidebar from '../components/layout/AdminSidebar.jsx';
 import AdminHeader from '../components/layout/AdminHeader.jsx';
 
 export const metadata = {
-  title: 'Maaza Printwala — Admin Control Panel',
+  title: 'Maza Printwala — Admin Control Panel',
   description: 'Management console for dynamic product catalogue, pricing rules, artwork QC, and orders.',
 };
 
