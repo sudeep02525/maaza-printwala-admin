@@ -19,7 +19,9 @@ import { useAdminAuthStore } from '../../store/adminAuthStore.js';
 const navItems = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
   { name: 'Orders & QC', href: '/orders', icon: ShoppingCart },
-  { name: 'Catalogue & Products', href: '/products', icon: Package },
+  { name: 'Products', href: '/products', icon: Package },
+  { name: 'Categories & SEO', href: '/categories', icon: FolderTree },
+  { name: 'Content (CMS)', href: '/cms', icon: Layers },
 ];
 
 export default function AdminSidebar() {

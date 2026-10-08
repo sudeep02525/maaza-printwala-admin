@@ -13,7 +13,7 @@ export default function EditProduct() {
   const [isLoading, setIsLoading] = useState(false);
 
   // Core product fields
-  const [form, setForm] = useState({ name:'', slug:'', category:'', basePrice:'', mrp:'', shortDescription:'', description:'', isActive:true, isFeatured:false, artworkRequirements: '' });
+  const [form, setForm] = useState({ name:'', slug:'', category:'', basePrice:'', mrp:'', shortDescription:'', description:'', isActive:true, isFeatured:false, artworkRequirements: '', metaTitle: '', metaDescription: '', keywords: '' });
   const [categories, setCategories] = useState([]);
   // Options + pricing
   const [attributes, setAttributes] = useState([]);         
@@ -40,7 +40,10 @@ export default function EditProduct() {
             description: product.description||'', 
             isActive: product.isActive, 
             isFeatured: product.isFeatured,
-            artworkRequirements: product.artworkRequirements ? JSON.stringify(product.artworkRequirements, null, 2) : ''
+            artworkRequirements: product.artworkRequirements ? JSON.stringify(product.artworkRequirements, null, 2) : '',
+            metaTitle: product.metaTitle || '',
+            metaDescription: product.metaDescription || '',
+            keywords: product.keywords ? (Array.isArray(product.keywords) ? product.keywords.join(', ') : product.keywords) : ''
           });
           setAttributes(schema?.attributes || []);
           setQuantityTiers(schema?.quantityTiers || [100,250,500,1000]);
@@ -167,6 +170,25 @@ export default function EditProduct() {
         <div className="pt-6 border-t border-slate-100">
           <h3 className="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest mb-4">Pricing Rules</h3>
           <PricingEditor pricing={pricing} setPricing={setPricing} />
+        </div>
+
+        {/* SEO (Search Engine Optimization) */}
+        <div className="pt-6 border-t border-slate-100">
+          <h3 className="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest mb-4">SEO</h3>
+          <div className="space-y-6">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">Meta Title</label>
+              <input type="text" name="metaTitle" value={form.metaTitle} onChange={e => setForm({...form, metaTitle: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 outline-none text-sm" placeholder="Title for search engines" />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">Meta Description</label>
+              <textarea name="metaDescription" value={form.metaDescription} onChange={e => setForm({...form, metaDescription: e.target.value})} rows="2" className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 outline-none text-sm" placeholder="Description for search engines" />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">Keywords</label>
+              <input type="text" name="keywords" value={form.keywords} onChange={e => setForm({...form, keywords: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 outline-none text-sm" placeholder="Comma separated, e.g. business cards, cheap printing" />
+            </div>
+          </div>
         </div>
 
         {/* Actions */}
