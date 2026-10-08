@@ -14,10 +14,10 @@ export default function AdminProducts() {
     try {
       // In the admin app, axiosInstance is probably configured with base URL
       const response = await axiosInstance.get('/products');
-      if (response.data.success) {
-        setProducts(response.data.data.products);
+      if (response.success) {
+        setProducts(response.data.products);
       } else {
-        setError(response.data.message || 'Failed to fetch products');
+        setError(response.message || 'Failed to fetch products');
       }
     } catch (err) {
       setError('An error occurred while fetching products');
@@ -34,10 +34,10 @@ export default function AdminProducts() {
     if (!confirm('Are you sure you want to delete this product?')) return;
     try {
       const response = await axiosInstance.delete(`/products/${id}`);
-      if (response.data.success) {
+      if (response.success) {
         fetchProducts(); // Refresh list
       } else {
-        alert(response.data.message || 'Failed to delete');
+        alert(response.message || 'Failed to delete');
       }
     } catch (err) {
       alert('Error deleting product');
@@ -105,9 +105,6 @@ export default function AdminProducts() {
                     </span>
                   </td>
                   <td className="py-4 px-6 text-right space-x-2 whitespace-nowrap">
-                    <Link href={`/products/edit/${product._id}`} className="inline-flex items-center justify-center p-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors border border-transparent hover:border-slate-200">
-                      <Edit className="w-4 h-4" />
-                    </Link>
                     <button onClick={() => handleDelete(product._id)} className="inline-flex items-center justify-center p-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors border border-transparent hover:border-slate-200">
                       <Trash2 className="w-4 h-4" />
                     </button>

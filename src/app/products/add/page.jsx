@@ -30,8 +30,8 @@ export default function AdminAddProduct() {
   useEffect(() => {
     axiosInstance.get('/categories')
       .then(res => {
-        if (res.data.success) {
-          setCategories(res.data.data.categories || res.data.data);
+        if (res.success) {
+          setCategories(res.data.categories || res.data);
         }
       })
       .catch(err => console.error(err));
@@ -74,11 +74,11 @@ export default function AdminAddProduct() {
           'Content-Type': 'multipart/form-data'
         }
       });
-      if (response.data.success) {
+      if (response.success) {
         alert('Product created successfully!');
         router.push('/products');
       } else {
-        alert(response.data.message || 'Failed to create product');
+        alert(response.message || 'Failed to create product');
       }
     } catch (err) {
       alert('Error creating product');
