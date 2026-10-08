@@ -105,6 +105,9 @@ export default function AdminProducts() {
                     </span>
                   </td>
                   <td className="py-4 px-6 text-right space-x-2 whitespace-nowrap">
+                    <Link href={`/products/edit/${product._id}`} className="inline-flex items-center justify-center p-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors border border-transparent hover:border-slate-200">
+                      <Edit className="w-4 h-4" />
+                    </Link>
                     <button onClick={() => handleDelete(product._id)} className="inline-flex items-center justify-center p-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors border border-transparent hover:border-slate-200">
                       <Trash2 className="w-4 h-4" />
                     </button>

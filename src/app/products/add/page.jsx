@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Save, UploadCloud } from 'lucide-react';
 import axiosInstance from '../../../services/axiosInstance.js';
+import OptionsEditor from '../../../components/OptionsEditor.jsx';
+import PricingEditor from '../../../components/PricingEditor.jsx';
 
 export default function AdminAddProduct() {
   const router = useRouter();
@@ -24,6 +26,9 @@ export default function AdminAddProduct() {
       bleedMm: 3
     }, null, 2)
   });
+  const [attributes, setAttributes] = useState([]);
+  const [quantityTiers, setQuantityTiers] = useState([100, 250, 500, 1000]);
+  const [pricing, setPricing] = useState({ basePrice: '', quantityBreaks: [], attributeModifiers: [] });
   const [imageFile, setImageFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -66,6 +71,10 @@ export default function AdminAddProduct() {
     if (imageFile) {
       data.append('images', imageFile);
     }
+    
+    data.append('attributes', JSON.stringify(attributes));
+    data.append('quantityTiers', JSON.stringify(quantityTiers));
+    data.append('pricingRule', JSON.stringify(pricing));
 
     try {
       // In the admin app, axiosInstance automatically handles tokens via interceptors
@@ -189,6 +198,29 @@ export default function AdminAddProduct() {
               <p className="text-[10px] text-slate-500 mt-1.5 font-medium">Used by the Pre-Press engine to validate customer uploads.</p>
             </div>
           </div>
+        </div>
+
+        {/* Options & Configuration */}
+        <div className="pt-6 border-t border-slate-100">
+          <h3 className="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest mb-4">Options & Configuration</h3>
+          <OptionsEditor attributes={attributes} setAttributes={setAttributes} />
+          
+          <div className="mt-6">
+            <label className="block text-xs font-bold text-slate-700 mb-1.5">Quantity Tiers (comma separated)</label>
+            <input 
+              type="text" 
+              value={quantityTiers.join(', ')} 
+              onChange={e => setQuantityTiers(e.target.value.split(',').map(n => Number(n.trim())).filter(n => !isNaN(n)))}
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 outline-none text-sm"
+              placeholder="100, 250, 500, 1000"
+            />
+          </div>
+        </div>
+
+        {/* Pricing */}
+        <div className="pt-6 border-t border-slate-100">
+          <h3 className="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest mb-4">Pricing Rules</h3>
+          <PricingEditor pricing={pricing} setPricing={setPricing} />
         </div>
 
         {/* Actions */}

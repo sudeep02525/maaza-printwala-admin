@@ -20,12 +20,6 @@ const navItems = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
   { name: 'Orders & QC', href: '/orders', icon: ShoppingCart },
   { name: 'Catalogue & Products', href: '/products', icon: Package },
-  { name: 'Categories', href: '/categories', icon: FolderTree },
-  { name: 'Pricing Rules', href: '/pricing', icon: DollarSign },
-  { name: 'Artwork Review', href: '/artwork', icon: Layers },
-  { name: 'Customers', href: '/customers', icon: Users },
-  { name: 'CMS & Content', href: '/cms', icon: FileText },
-  { name: 'Settings', href: '/settings', icon: Settings },
 ];
 
 export default function AdminSidebar() {
