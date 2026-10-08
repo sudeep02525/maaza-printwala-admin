@@ -49,25 +49,25 @@ export default function AdminProducts() {
 
   return (
     <div className="space-y-6 max-w-7xl">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 neu-flat p-6 rounded-2xl  /80 ">
         <div>
           <h1 className="text-2xl font-black text-slate-700">Products Catalogue</h1>
           <p className="text-sm text-slate-600 mt-1 font-normal">Manage all your print products, pricing, and active status.</p>
         </div>
         <Link 
           href="/products/add" 
-          className="flex items-center gap-2 bg-slate-200 text-slate-700 px-5 py-2.5 rounded-xl text-sm font-bold shadow-md hover:bg-slate-300 transition-colors"
+          className="flex items-center gap-2 neu-flat text-slate-700 px-5 py-2.5 rounded-xl text-sm font-bold  hover:bg-slate-300 transition-colors"
         >
           <Plus className="w-4 h-4" />
           Add Product
         </Link>
       </div>
 
-      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+      <div className="neu-flat rounded-2xl  /80  overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-slate-50 text-slate-500 text-[11px] uppercase font-extrabold tracking-wider border-b border-slate-200">
+              <tr className="neu-flat text-slate-500 text-[11px] uppercase font-extrabold tracking-wider  ">
                 <th className="py-4 px-6">Image</th>
                 <th className="py-4 px-6">Product Info</th>
                 <th className="py-4 px-6">Category</th>
@@ -78,17 +78,17 @@ export default function AdminProducts() {
             </thead>
             <tbody className="divide-y divide-slate-100 text-sm">
               {products.map((product) => (
-                <tr key={product._id} className="hover:bg-slate-50/75 transition-colors">
+                <tr key={product._id} className="hover:neu-flat/75 transition-colors">
                   <td className="py-4 px-6">
                     {product.images && product.images[0] ? (
                       <img 
                         src={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}${product.images[0]}`} 
                         alt={product.name} 
-                        className="w-12 h-12 object-cover rounded-xl border border-slate-200"
+                        className="w-12 h-12 object-cover rounded-xl  "
                         onError={(e) => { e.target.src = '/placeholder.png' }}
                       />
                     ) : (
-                      <div className="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center text-slate-400 border border-slate-200">
+                      <div className="w-12 h-12 neu-flat rounded-xl flex items-center justify-center text-slate-400  ">
                         <ImageIcon className="w-5 h-5" />
                       </div>
                     )}
@@ -100,15 +100,15 @@ export default function AdminProducts() {
                   <td className="py-4 px-6 text-slate-700 font-medium">{product.category?.name || '-'}</td>
                   <td className="py-4 px-6 font-black text-slate-700">₹{product.basePrice}</td>
                   <td className="py-4 px-6">
-                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${product.isActive ? 'bg-slate-100 text-slate-700 border border-slate-200' : 'bg-slate-50 text-slate-500 border border-slate-200'}`}>
+                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${product.isActive ? 'neu-flat text-slate-700  ' : 'neu-flat text-slate-500  '}`}>
                       {product.isActive ? 'Active' : 'Inactive'}
                     </span>
                   </td>
                   <td className="py-4 px-6 text-right space-x-2 whitespace-nowrap">
-                    <Link href={`/products/edit/${product._id}`} className="inline-flex items-center justify-center p-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors border border-transparent hover:border-slate-200">
+                    <Link href={`/products/edit/${product._id}`} className="inline-flex items-center justify-center p-2 text-slate-600 hover:neu-flat rounded-lg transition-colors  border-transparent hover:">
                       <Edit className="w-4 h-4" />
                     </Link>
-                    <button onClick={() => handleDelete(product._id)} className="inline-flex items-center justify-center p-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors border border-transparent hover:border-slate-200">
+                    <button onClick={() => handleDelete(product._id)} className="inline-flex items-center justify-center p-2 text-slate-600 hover:neu-flat rounded-lg transition-colors  border-transparent hover:">
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </td>

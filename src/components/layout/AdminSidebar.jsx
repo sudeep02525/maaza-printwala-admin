@@ -29,11 +29,11 @@ export default function AdminSidebar() {
   const { logout, user } = useAdminAuthStore();
 
   return (
-    <aside className="w-64 bg-white text-slate-600 flex flex-col min-h-screen border-r border-slate-200 shadow-sm">
+    <aside className="w-64 neu-flat text-slate-600 flex flex-col min-h-screen   ">
       {/* Brand Logo Header */}
-      <div className="h-16 flex items-center px-6 bg-white border-b border-slate-200">
+      <div className="h-16 flex items-center px-6 neu-flat  ">
         <Link href="/" className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded bg-slate-200 flex items-center justify-center font-bold text-slate-700 shadow-sm">
+          <div className="w-8 h-8 rounded neu-flat flex items-center justify-center font-bold text-slate-700 ">
             M
           </div>
           <div className="flex flex-col">
@@ -57,8 +57,8 @@ export default function AdminSidebar() {
               href={item.href}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                 isActive
-                  ? 'bg-slate-200 text-slate-700 shadow-sm'
-                  : 'text-slate-500 hover:text-slate-700 hover:bg-slate-100'
+                  ? 'neu-flat text-slate-700 '
+                  : 'text-slate-500 hover:text-slate-700 hover:neu-flat'
               }`}
             >
               <Icon className="w-5 h-5 flex-shrink-0" />
@@ -69,10 +69,10 @@ export default function AdminSidebar() {
       </nav>
 
       {/* User Profile / Logout */}
-      <div className="p-4 border-t border-slate-200 bg-slate-50/50">
+      <div className="p-4   neu-flat/50">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-8 h-8 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-sm">
+            <div className="w-8 h-8 rounded-full neu-flat text-slate-700 flex items-center justify-center font-bold text-sm">
               {user?.name?.charAt(0) || 'A'}
             </div>
             <div className="min-w-0">
@@ -83,7 +83,7 @@ export default function AdminSidebar() {
           <button
             onClick={logout}
             title="Log out"
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-200 transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:neu-flat transition-colors neu-btn"
           >
             <LogOut className="w-4 h-4" />
           </button>

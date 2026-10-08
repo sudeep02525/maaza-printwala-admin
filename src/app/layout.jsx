@@ -10,7 +10,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex">
+      <body className="neu-flat text-slate-700 font-sans antialiased min-h-screen flex">
         <QueryProvider>
           <AdminShell>{children}</AdminShell>
         </QueryProvider>

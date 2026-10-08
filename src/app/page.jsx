@@ -67,7 +67,7 @@ export default function AdminDashboardPage() {
   return (
     <div className="space-y-8 max-w-7xl select-none">
       {/* Page Title & Status Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 neu-flat p-6 rounded-2xl  /80 ">
         <div>
           <h1 className="text-2xl font-black text-slate-700">Printing Business Control Center</h1>
           <p className="text-sm text-slate-600 mt-1 font-normal">
@@ -75,7 +75,7 @@ export default function AdminDashboardPage() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200">
+          <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold neu-flat text-slate-700  ">
             <CheckCircle className="w-4 h-4 text-slate-600" />
             Live Press Active (v1.0.0)
           </span>
@@ -86,7 +86,7 @@ export default function AdminDashboardPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
         
         {/* KPI 1: Total Revenue */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-start justify-between">
+        <div className="neu-flat p-5 rounded-2xl  /80  flex items-start justify-between">
           <div>
             <p className="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest">Total Revenue</p>
             <p className="text-2xl font-black text-slate-700 mt-2">₹{stats.totalRevenue?.toLocaleString('en-IN')}</p>
@@ -94,13 +94,13 @@ export default function AdminDashboardPage() {
               <TrendingUp className="w-3 h-3" /> Authoritative volume
             </p>
           </div>
-          <div className="p-2.5 bg-slate-100 rounded-xl text-slate-600">
+          <div className="p-2.5 neu-flat rounded-xl text-slate-600">
             <DollarSign className="w-5 h-5" />
           </div>
         </div>
 
         {/* KPI 2: Today's Orders */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-start justify-between">
+        <div className="neu-flat p-5 rounded-2xl  /80  flex items-start justify-between">
           <div>
             <p className="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest">Today&apos;s Orders</p>
             <p className="text-2xl font-black text-slate-700 mt-2">{stats.totalOrders}</p>
@@ -108,13 +108,13 @@ export default function AdminDashboardPage() {
               <ShoppingCart className="w-3 h-3" /> +14.2% daily growth
             </p>
           </div>
-          <div className="p-2.5 bg-slate-100 rounded-xl text-slate-600">
+          <div className="p-2.5 neu-flat rounded-xl text-slate-600">
             <ShoppingCart className="w-5 h-5" />
           </div>
         </div>
 
         {/* KPI 3: Pending Artwork Reviews */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-start justify-between">
+        <div className="neu-flat p-5 rounded-2xl  /80  flex items-start justify-between">
           <div>
             <p className="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest">Pending Artwork</p>
             <p className="text-2xl font-black text-slate-700 mt-2">{stats.pendingArtworkReviews}</p>
@@ -122,13 +122,13 @@ export default function AdminDashboardPage() {
               <AlertCircle className="w-3 h-3" /> Pre-press check needed
             </p>
           </div>
-          <div className="p-2.5 bg-slate-100 rounded-xl text-slate-600">
+          <div className="p-2.5 neu-flat rounded-xl text-slate-600">
             <Clock className="w-5 h-5" />
           </div>
         </div>
 
         {/* KPI 4: In Production Queue */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-start justify-between">
+        <div className="neu-flat p-5 rounded-2xl  /80  flex items-start justify-between">
           <div>
             <p className="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest">Printing Queue</p>
             <p className="text-2xl font-black text-slate-700 mt-2">{Math.round((stats.totalOrders || 12) * 0.6)}</p>
@@ -136,13 +136,13 @@ export default function AdminDashboardPage() {
               <Printer className="w-3 h-3" /> Active on press
             </p>
           </div>
-          <div className="p-2.5 bg-slate-100 rounded-xl text-slate-600">
+          <div className="p-2.5 neu-flat rounded-xl text-slate-600">
             <Printer className="w-5 h-5" />
           </div>
         </div>
 
         {/* KPI 5: Ready for Dispatch */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-start justify-between">
+        <div className="neu-flat p-5 rounded-2xl  /80  flex items-start justify-between">
           <div>
             <p className="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest">Dispatch Ready</p>
             <p className="text-2xl font-black text-slate-700 mt-2">{Math.round((stats.totalOrders || 12) * 0.3)}</p>
@@ -150,7 +150,7 @@ export default function AdminDashboardPage() {
               <Truck className="w-3 h-3" /> Packed &amp; waiting
             </p>
           </div>
-          <div className="p-2.5 bg-slate-100 rounded-xl text-slate-700">
+          <div className="p-2.5 neu-flat rounded-xl text-slate-700">
             <Truck className="w-5 h-5" />
           </div>
         </div>
@@ -158,9 +158,9 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Printing Workflow & Pre-Press Quick Center */}
-      <div className="bg-slate-100 text-slate-700 p-8 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div className="neu-flat text-slate-700 p-8 rounded-2xl    flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="space-y-2">
-          <span className="inline-block px-3 py-1 rounded-full text-[10px] font-black bg-slate-500 text-white uppercase tracking-wider mb-1">
+          <span className="inline-block px-3 py-1 rounded-full text-[10px] font-black neu-flat0 text-slate-700 uppercase tracking-wider mb-1">
             Pre-Press Assurance Engine
           </span>
           <h3 className="text-xl font-black text-slate-700">Live Press Production &amp; Artwork Verification Center</h3>
@@ -171,13 +171,13 @@ export default function AdminDashboardPage() {
         <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto shrink-0">
           <a
             href="/orders"
-            className="w-full sm:w-auto px-5 py-2.5 bg-slate-900 hover:bg-slate-500 text-white rounded-xl font-bold text-xs transition-all shadow-md flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-5 py-2.5  hover:neu-flat0 text-slate-700 rounded-xl font-bold text-xs transition-all  flex items-center justify-center gap-2 neu-btn"
           >
             <FileCheck className="w-4 h-4" /> Review Artworks (4)
           </a>
           <a
             href="/products"
-            className="w-full sm:w-auto px-5 py-2.5 bg-white hover:bg-slate-50 text-slate-700 rounded-xl font-bold text-xs transition-all border border-slate-300 flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-5 py-2.5 neu-flat hover:neu-flat text-slate-700 rounded-xl font-bold text-xs transition-all   flex items-center justify-center gap-2"
           >
             Manage Catalogue <ExternalLink className="w-4 h-4" />
           </a>
@@ -185,8 +185,8 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Live Production Orders Queue */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
-        <div className="p-6 border-b border-slate-200 flex items-center justify-between">
+      <div className="neu-flat rounded-2xl  /80  overflow-hidden">
+        <div className="p-6   flex items-center justify-between">
           <div>
             <h2 className="text-lg font-black text-slate-700">Live Production Orders</h2>
             <p className="text-xs text-slate-500 mt-0.5 font-normal">Active print queue from storefront customers</p>
@@ -203,7 +203,7 @@ export default function AdminDashboardPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-slate-50 text-slate-500 text-[11px] uppercase font-extrabold tracking-wider border-b border-slate-200">
+              <tr className="neu-flat text-slate-500 text-[11px] uppercase font-extrabold tracking-wider  ">
                 <th className="py-4 px-6">Order ID</th>
                 <th className="py-4 px-6">Client / Corporate Account</th>
                 <th className="py-4 px-6">Print Specification</th>
@@ -218,7 +218,7 @@ export default function AdminDashboardPage() {
                 const isProd = order.orderStatus === 'PRODUCTION';
                 
                 return (
-                  <tr key={order._id} className="hover:bg-slate-50/75 transition-colors">
+                  <tr key={order._id} className="hover:neu-flat/75 transition-colors">
                     <td className="py-4 px-6 font-bold text-slate-700">{order.orderNumber}</td>
                     <td className="py-4 px-6">
                       <p className="font-bold text-slate-600">{order.user?.name || 'Guest Account'}</p>
@@ -233,16 +233,16 @@ export default function AdminDashboardPage() {
                     </td>
                     <td className="py-4 px-6">
                       <span
-                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200`}
+                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold neu-flat text-slate-700  `}
                       >
-                        <span className={`w-1.5 h-1.5 rounded-full ${isReview ? 'bg-slate-400 animate-pulse' : isProd ? 'bg-slate-600' : 'bg-slate-500'}`}></span>
+                        <span className={`w-1.5 h-1.5 rounded-full ${isReview ? 'bg-slate-400 animate-pulse' : isProd ? 'bg-slate-600' : 'neu-flat0'}`}></span>
                         {isReview ? 'Artwork Review' : isProd ? 'In Printing' : order.orderStatus}
                       </span>
                     </td>
                     <td className="py-4 px-6">
                       <a
                         href={`/orders/${order._id}`}
-                        className="inline-flex items-center gap-1 px-3 py-1.5 bg-white hover:bg-slate-500 hover:text-white border border-slate-200 text-slate-700 rounded-lg text-xs font-bold transition-all"
+                        className="inline-flex items-center gap-1 px-3 py-1.5 neu-flat hover:neu-flat0 hover:text-slate-700   text-slate-700 rounded-lg text-xs font-bold transition-all"
                       >
                         <span>{isReview ? 'Verify DPI Proof' : isProd ? 'Track Press Run' : 'Manage Order'}</span>
                         <ArrowRight className="w-3 h-3" />

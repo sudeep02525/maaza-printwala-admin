@@ -46,25 +46,25 @@ export default function AdminOrders() {
 
   return (
     <div className="space-y-6 max-w-7xl select-none">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 neu-flat p-6 rounded-2xl  /80 ">
         <div>
           <h1 className="text-2xl font-black text-slate-700">Orders & Fulfillment</h1>
           <p className="text-sm text-slate-600 mt-1 font-normal">Manage customer orders and update production status.</p>
         </div>
         <button 
           onClick={fetchOrders}
-          className="flex items-center gap-2 bg-slate-100 text-slate-700 px-4 py-2.5 rounded-xl text-sm font-bold shadow-sm hover:bg-slate-200 transition-colors border border-slate-200"
+          className="flex items-center gap-2 neu-flat text-slate-700 px-4 py-2.5 rounded-xl text-sm font-bold  hover:neu-flat transition-colors   neu-btn"
         >
           <RefreshCw className="w-4 h-4" />
           Refresh
         </button>
       </div>
 
-      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+      <div className="neu-flat rounded-2xl  /80  overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-slate-50 text-slate-500 text-[11px] uppercase font-extrabold tracking-wider border-b border-slate-200">
+              <tr className="neu-flat text-slate-500 text-[11px] uppercase font-extrabold tracking-wider  ">
                 <th className="py-4 px-6">Order Info</th>
                 <th className="py-4 px-6">Customer</th>
                 <th className="py-4 px-6">Print Specs</th>
@@ -76,16 +76,16 @@ export default function AdminOrders() {
             <tbody className="divide-y divide-slate-100 text-sm">
               {orders.map((order) => {
                 const getStatusColor = (status) => {
-                   if(status === 'DELIVERED') return 'bg-slate-100 text-slate-600 border-slate-200';
-                   if(status === 'SHIPPED') return 'bg-slate-50 text-slate-600 border-slate-200';
-                   if(status === 'PRINTING') return 'bg-slate-50 text-slate-600 border-slate-200';
-                   return 'bg-slate-100 text-slate-700 border-slate-200';
+                   if(status === 'DELIVERED') return 'neu-flat text-slate-600 ';
+                   if(status === 'SHIPPED') return 'neu-flat text-slate-600 ';
+                   if(status === 'PRINTING') return 'neu-flat text-slate-600 ';
+                   return 'neu-flat text-slate-700 ';
                 };
                 
                 return (
-                <tr key={order._id} className="hover:bg-slate-50/75 transition-colors">
+                <tr key={order._id} className="hover:neu-flat/75 transition-colors">
                   <td className="py-4 px-6">
-                     <span className="font-mono text-xs font-bold text-slate-700 bg-slate-100 px-2 py-1 rounded-md border border-slate-200">{order.orderNumber}</span>
+                     <span className="font-mono text-xs font-bold text-slate-700 neu-flat px-2 py-1 rounded-md  ">{order.orderNumber}</span>
                   </td>
                   <td className="py-4 px-6">
                     <p className="font-bold text-slate-700">{order.contactDetails?.fullName || order.user?.name || 'Guest'}</p>
@@ -103,13 +103,13 @@ export default function AdminOrders() {
                   </td>
                   <td className="py-4 px-6">
                     <div className="flex flex-col gap-2 items-start">
-                       <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${getStatusColor(order.fulfilmentStatus)}`}>
+                       <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider  ${getStatusColor(order.fulfilmentStatus)}`}>
                          {order.fulfilmentStatus}
                        </span>
                        <select
                          value={order.fulfilmentStatus}
                          onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                         className="text-[11px] font-bold border border-slate-300 rounded-lg px-2 py-1.5 outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 cursor-pointer bg-slate-50 text-slate-700"
+                         className="text-[11px] font-bold   rounded-lg px-2 py-1.5 outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 cursor-pointer neu-flat text-slate-700"
                        >
                          <option value="ORDER_RECEIVED">Pending Receipt</option>
                          <option value="PRINTING">Send to Printing</option>
