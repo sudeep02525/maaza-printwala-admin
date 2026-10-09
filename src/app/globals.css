@@ -25,7 +25,6 @@
   body {
     background-color: var(--color-bg-neutral);
     color: var(--color-charcoal);
-    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }

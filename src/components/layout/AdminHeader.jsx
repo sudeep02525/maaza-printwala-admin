@@ -7,7 +7,7 @@ export default function AdminHeader() {
   const { user } = useAdminAuthStore();
 
   return (
-    <header className="h-16 neu-flat   flex items-center justify-between px-8 sticky top-0 z-30 shadow-xs">
+    <header className="h-16 neu-flat flex items-center justify-between px-8 z-30 shadow-sm shrink-0">
       {/* Search & Breadcrumbs */}
       <div className="flex items-center gap-6 flex-1 max-w-md">
         <div className="relative w-full">
@@ -24,7 +24,7 @@ export default function AdminHeader() {
       <div className="flex items-center gap-4">
         {/* Environment Badge */}
         <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold neu-flat text-slate-700  ">
-          <span className="w-1.5 h-1.5 rounded-full neu-flat0"></span>
+          <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
           Live Production
         </span>
 
@@ -37,7 +37,7 @@ export default function AdminHeader() {
         {/* Notifications */}
         <button className="relative p-2 rounded-lg text-slate-500 hover:text-slate-700 hover:neu-flat transition-colors neu-btn">
           <Bell className="w-5 h-5" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full neu-flat0 ring-2 ring-white"></span>
+          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500 ring-2 ring-white"></span>
         </button>
       </div>
     </header>

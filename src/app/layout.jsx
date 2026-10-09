@@ -1,6 +1,9 @@
+import { Inter } from 'next/font/google';
 import './globals.css';
 import QueryProvider from '../providers/QueryProvider.jsx';
 import AdminShell from '../components/AdminShell.jsx';
+
+const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
 export const metadata = {
   title: 'Maza Printwala — Admin Control Panel',
@@ -9,8 +12,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className="neu-flat text-slate-700 font-sans antialiased min-h-screen flex">
+    <html lang="en" className={`${inter.variable}`}>
+      <body className="text-slate-800 font-sans antialiased h-screen overflow-hidden flex bg-[#E0E5EC]">
         <QueryProvider>
           <AdminShell>{children}</AdminShell>
         </QueryProvider>

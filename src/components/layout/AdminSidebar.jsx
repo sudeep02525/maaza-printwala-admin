@@ -29,7 +29,7 @@ export default function AdminSidebar() {
   const { logout, user } = useAdminAuthStore();
 
   return (
-    <aside className="w-64 neu-flat text-slate-600 flex flex-col min-h-screen   ">
+    <aside className="w-64 neu-flat text-slate-600 flex flex-col h-screen   ">
       {/* Brand Logo Header */}
       <div className="h-16 flex items-center px-6 neu-flat  ">
         <Link href="/" className="flex items-center gap-3">
@@ -58,7 +58,7 @@ export default function AdminSidebar() {
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                 isActive
                   ? 'neu-flat text-slate-700 '
-                  : 'text-slate-500 hover:text-slate-700 hover:neu-flat'
+                  : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200'
               }`}
             >
               <Icon className="w-5 h-5 flex-shrink-0" />
@@ -69,7 +69,7 @@ export default function AdminSidebar() {
       </nav>
 
       {/* User Profile / Logout */}
-      <div className="p-4   neu-flat/50">
+      <div className="p-4   neu-flat">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3 min-w-0">
             <div className="w-8 h-8 rounded-full neu-flat text-slate-700 flex items-center justify-center font-bold text-sm">

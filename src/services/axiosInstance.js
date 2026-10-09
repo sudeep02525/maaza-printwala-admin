@@ -20,7 +20,7 @@ axiosInstance.interceptors.response.use(
         await axios.post(`${API_URL}/auth/refresh`, {}, { withCredentials: true });
         return axiosInstance(originalRequest);
       } catch (refreshError) {
-        if (typeof window !== 'undefined') {
+        if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
           window.location.href = '/login';
         }
         return Promise.reject(refreshError);
