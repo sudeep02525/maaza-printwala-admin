@@ -2,6 +2,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import QueryProvider from '../providers/QueryProvider.jsx';
 import AdminShell from '../components/AdminShell.jsx';
+import { Toaster } from 'react-hot-toast';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -16,6 +17,7 @@ export default function RootLayout({ children }) {
       <body className="text-slate-800 font-sans antialiased h-screen overflow-hidden flex bg-[#E0E5EC]">
         <QueryProvider>
           <AdminShell>{children}</AdminShell>
+          <Toaster position="top-right" />
         </QueryProvider>
       </body>
     </html>

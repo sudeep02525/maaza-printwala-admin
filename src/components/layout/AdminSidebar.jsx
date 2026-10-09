@@ -22,6 +22,7 @@ const navItems = [
   { name: 'Products', href: '/products', icon: Package },
   { name: 'Categories & SEO', href: '/categories', icon: FolderTree },
   { name: 'Content (CMS)', href: '/cms', icon: Layers },
+  { name: 'Templates', href: '/templates', icon: FileText },
 ];
 
 export default function AdminSidebar() {
