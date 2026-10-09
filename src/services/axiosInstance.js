@@ -12,7 +12,20 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.response.use(
   (response) => response.data,
-  (error) => {
+  async (error) => {
+    const originalRequest = error.config;
+    if (error.response?.status === 401 && !originalRequest._retry && originalRequest.url !== '/auth/login') {
+      originalRequest._retry = true;
+      try {
+        await axios.post(`${API_URL}/auth/refresh`, {}, { withCredentials: true });
+        return axiosInstance(originalRequest);
+      } catch (refreshError) {
+        if (typeof window !== 'undefined') {
+          window.location.href = '/login';
+        }
+        return Promise.reject(refreshError);
+      }
+    }
     const message = error.response?.data?.message || error.message || 'Network error occurred';
     console.error('API Error:', message);
     return Promise.reject(new Error(message));
