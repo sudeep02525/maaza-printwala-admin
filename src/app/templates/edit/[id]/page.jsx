@@ -15,6 +15,8 @@ export default function EditTemplatePage() {
     thumbnail: '',
     previewFront: '',
     previewBack: '',
+    canvasJson: '',
+    editableFields: '',
     isActive: true
   });
   const [loading, setLoading] = useState(false);
@@ -37,6 +39,8 @@ export default function EditTemplatePage() {
             thumbnail: template.thumbnail || '',
             previewFront: template.previewFront || '',
             previewBack: template.previewBack || '',
+            canvasJson: template.canvasJson ? JSON.stringify(template.canvasJson, null, 2) : '',
+            editableFields: template.editableFields ? JSON.stringify(template.editableFields, null, 2) : '',
             isActive: template.isActive ?? true
           });
         }
@@ -53,7 +57,36 @@ export default function EditTemplatePage() {
     e.preventDefault();
     setLoading(true);
     try {
-      await axiosInstance.put(`/templates/${params.id}`, formData);
+      let parsedCanvas = undefined;
+      let parsedFields = undefined;
+
+      if (formData.canvasJson?.trim()) {
+        try {
+          parsedCanvas = JSON.parse(formData.canvasJson);
+        } catch {
+          toast.error('Invalid Canvas JSON syntax');
+          setLoading(false);
+          return;
+        }
+      }
+
+      if (formData.editableFields?.trim()) {
+        try {
+          parsedFields = JSON.parse(formData.editableFields);
+        } catch {
+          toast.error('Invalid Editable Fields JSON syntax');
+          setLoading(false);
+          return;
+        }
+      }
+
+      const payload = {
+        ...formData,
+        canvasJson: parsedCanvas,
+        editableFields: parsedFields
+      };
+
+      await axiosInstance.put(`/templates/${params.id}`, payload);
       toast.success('Template updated successfully');
       router.push('/templates');
     } catch (error) {
@@ -93,6 +126,26 @@ export default function EditTemplatePage() {
         <div>
           <label className="block text-sm font-semibold text-slate-700 mb-1">Preview Back URL</label>
           <input type="text" value={formData.previewBack} onChange={e => setFormData({...formData, previewBack: e.target.value})} className="w-full px-3 py-2 border rounded-md" />
+        </div>
+        <div>
+          <label className="block text-sm font-semibold text-slate-700 mb-1">Canvas JSON (Fabric v7 format)</label>
+          <textarea
+            rows={5}
+            value={formData.canvasJson}
+            onChange={e => setFormData({...formData, canvasJson: e.target.value})}
+            placeholder='{"version": "7.4.0", "width": 600, "height": 350, "objects": [...]}'
+            className="w-full px-3 py-2 border rounded-md font-mono text-xs"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-semibold text-slate-700 mb-1">Editable Fields JSON</label>
+          <textarea
+            rows={4}
+            value={formData.editableFields}
+            onChange={e => setFormData({...formData, editableFields: e.target.value})}
+            placeholder='[{"key": "company_name", "label": "Company Name", "type": "TEXT", "defaultValue": "Acme"}]'
+            className="w-full px-3 py-2 border rounded-md font-mono text-xs"
+          />
         </div>
         <div className="flex items-center gap-2">
           <input type="checkbox" id="isActive" checked={formData.isActive} onChange={e => setFormData({...formData, isActive: e.target.checked})} className="w-4 h-4" />
