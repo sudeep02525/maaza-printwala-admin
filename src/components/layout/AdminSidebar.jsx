@@ -13,6 +13,9 @@ import {
   Settings,
   LogOut,
   Layers,
+  Ticket,
+  Headphones,
+  Star,
 } from 'lucide-react';
 import { useAdminAuthStore } from '../../store/adminAuthStore.js';
 
@@ -21,8 +24,13 @@ const navItems = [
   { name: 'Orders & QC', href: '/orders', icon: ShoppingCart },
   { name: 'Products', href: '/products', icon: Package },
   { name: 'Categories & SEO', href: '/categories', icon: FolderTree },
+  { name: 'Coupons & Promo', href: '/coupons', icon: Ticket },
+  { name: 'Support & B2B Leads', href: '/support', icon: Headphones },
+  { name: 'Reviews', href: '/reviews', icon: Star },
+  { name: 'Customers', href: '/customers', icon: Users },
   { name: 'Content (CMS)', href: '/cms', icon: Layers },
   { name: 'Templates', href: '/templates', icon: FileText },
+  { name: 'Settings', href: '/settings', icon: Settings },
 ];
 
 export default function AdminSidebar() {
