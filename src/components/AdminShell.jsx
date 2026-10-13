@@ -25,17 +25,17 @@ export default function AdminShell({ children }) {
 
   if (isLogin) return <>{children}</>;
 
-  // P3: Wix-styled branded loader
+  // Wix-styled branded loader using theme tokens
   if (isLoading) {
     return (
-      <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#F5F7F9] select-none">
-        <div className="bg-white p-8 rounded-2xl border border-[#E5E7EB] shadow-sm flex flex-col items-center text-center max-w-sm w-full mx-4 animate-in fade-in duration-200">
-          <div className="w-12 h-12 rounded-xl bg-[#111827] text-white flex items-center justify-center font-bold text-lg tracking-wider mb-4 shadow-sm">
+      <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[var(--bg-page)] select-none transition-colors">
+        <div className="bg-[var(--bg-card)] p-8 rounded-2xl border border-[var(--border)] shadow-sm flex flex-col items-center text-center max-w-sm w-full mx-4 animate-in fade-in duration-200">
+          <div className="w-12 h-12 rounded-xl bg-[var(--text-main)] text-[var(--bg-card)] flex items-center justify-center font-bold text-lg tracking-wider mb-4 shadow-sm">
             M
           </div>
-          <h2 className="text-base font-bold text-[#111827]">Maaza Printwala</h2>
-          <p className="text-xs text-[#6B7280] mt-1 mb-6">Checking administrator authorization...</p>
-          <div className="w-6 h-6 border-2 border-[#E5E7EB] border-t-[#111827] rounded-full animate-spin"></div>
+          <h2 className="text-base font-bold text-[var(--text-main)]">Maaza Printwala</h2>
+          <p className="text-xs text-[var(--text-muted)] mt-1 mb-6">Checking administrator authorization...</p>
+          <div className="w-6 h-6 border-2 border-[var(--border)] border-t-[var(--text-main)] rounded-full animate-spin"></div>
         </div>
       </div>
     );
@@ -46,10 +46,10 @@ export default function AdminShell({ children }) {
   return (
     <>
       <AdminSidebar />
-      <div className="flex-1 flex flex-col h-screen min-w-0 overflow-hidden bg-[#F5F7F9]">
+      <div className="flex-1 flex flex-col h-screen min-w-0 overflow-hidden bg-[var(--bg-page)] transition-colors">
         <AdminHeader />
-        {/* P2: Thin styled scrollbar enabled for main content area */}
-        <main className="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto bg-[#F5F7F9]">{children}</main>
+        {/* Thin styled scrollbar enabled for main content area */}
+        <main className="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto bg-[var(--bg-page)] transition-colors">{children}</main>
       </div>
       <CommandPalette />
     </>

@@ -1,6 +1,21 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
+  --bg-page: #F5F7F9;
+  --bg-card: #FFFFFF;
+  --bg-subtle: #F9FAFB;
+  --text-main: #111827;
+  --text-muted: #6B7280;
+  --text-faint: #9CA3AF;
+  --border: #E5E7EB;
+  --border-strong: #D1D5DB;
+  --accent-green: #12B76A;
+  --accent-red: #F04438;
+  --sidebar-bg: #FFFFFF;
+  --hover: #F3F4F6;
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.02);
+
   --color-brand-navy: #0F172A;
   --color-brand-blue: #1E50FF;
   --color-brand-blue-hover: #1A44D6;
@@ -8,14 +23,6 @@
   --color-brand-magenta: #D63384;
   --color-brand-yellow: #F59E0B;
   --color-charcoal: #111827;
-  --color-bg-primary: #F5F7F9;
-  --color-bg-neutral: #F5F7F9;
-  --color-card-bg: #FFFFFF;
-  --color-text-main: #111827;
-  --color-text-muted: #6B7280;
-  --color-accent-green: #12B76A;
-  --color-accent-red: #F04438;
-  --color-border: #E5E7EB;
   
   --z-header: 100;
   --z-megamenu: 200;
@@ -26,11 +33,32 @@
   --transition-smooth: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.dark {
+  --bg-page: #0B0B0C;
+  --bg-card: #17181A;
+  --bg-subtle: #1F2023;
+  --text-main: #F4F4F5;
+  --text-muted: #A1A1AA;
+  --text-faint: #71717A;
+  --border: #2A2B2F;
+  --border-strong: #3A3B40;
+  --accent-green: #2ED47A;
+  --accent-red: #FF6B6B;
+  --sidebar-bg: #131416;
+  --hover: #232427;
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.4);
+
+  --color-brand-navy: #F4F4F5;
+  --color-brand-blue: #38BDF8;
+  --color-brand-blue-hover: #0EA5E9;
+  --color-charcoal: #F4F4F5;
+}
+
 @layer base {
-  /* Thin elegant Wix-style scrollbars for main content & tables (P2 fix) */
+  /* Thin elegant Wix-style scrollbars for main content & tables */
   * {
     scrollbar-width: thin;
-    scrollbar-color: #D1D5DB transparent;
+    scrollbar-color: var(--border-strong) transparent;
   }
 
   ::-webkit-scrollbar {
@@ -43,20 +71,21 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background-color: #D1D5DB;
+    background-color: var(--border-strong);
     border-radius: 9999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background-color: #9CA3AF;
+    background-color: var(--text-muted);
   }
 
   body {
-    background-color: #F5F7F9;
-    color: #111827;
+    background-color: var(--bg-page);
+    color: var(--text-main);
     font-family: var(--font-sans), Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 }
 
@@ -68,7 +97,7 @@
   .z-toast { z-index: var(--z-toast); }
   .transition-apple { transition: var(--transition-smooth); }
 
-  /* Utility to completely hide scrollbars */
+  /* Utility to completely hide scrollbars where needed (e.g. sidebar menu) */
   .no-scrollbar::-webkit-scrollbar {
     display: none !important;
     width: 0px !important;
@@ -79,77 +108,79 @@
     scrollbar-width: none !important;
   }
 
-  /* Wix Design Language Cards */
+  /* Wix Design Language Cards - Theme Token Driven */
   .wix-card {
-    background-color: #FFFFFF;
+    background-color: var(--bg-card);
     border-radius: 12px;
-    border: 1px solid #E5E7EB;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.02);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-card);
+    color: var(--text-main);
   }
 
   .wix-card-hover {
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .wix-card-hover:hover {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
   }
 
-  /* Migration overrides for legacy neu-* classes to adopt Wix clean white card styling */
+  /* Migration overrides for legacy neu-* classes to adopt Wix clean token styling */
   .neu-flat {
-    background-color: #FFFFFF !important;
-    border: 1px solid #E5E7EB !important;
+    background-color: var(--bg-card) !important;
+    border: 1px solid var(--border) !important;
     border-radius: 12px !important;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.02) !important;
-    color: #111827 !important;
+    box-shadow: var(--shadow-card) !important;
+    color: var(--text-main) !important;
   }
 
   .neu-pressed {
-    background-color: #F3F4F6 !important;
-    border: 1px solid #E5E7EB !important;
+    background-color: var(--bg-subtle) !important;
+    border: 1px solid var(--border) !important;
     border-radius: 8px !important;
-    box-shadow: inset 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
-    color: #111827 !important;
+    box-shadow: inset 0 1px 2px 0 rgba(0, 0, 0, 0.1) !important;
+    color: var(--text-main) !important;
   }
   
   .neu-convex,
   .neu-concave {
-    background: #FFFFFF !important;
-    border: 1px solid #E5E7EB !important;
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border) !important;
     border-radius: 12px !important;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04) !important;
+    box-shadow: var(--shadow-card) !important;
+    color: var(--text-main) !important;
   }
 
   .neu-btn {
-    background-color: #FFFFFF !important;
-    border: 1px solid #E5E7EB !important;
+    background-color: var(--bg-card) !important;
+    border: 1px solid var(--border) !important;
     border-radius: 8px !important;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
-    color: #111827 !important;
+    color: var(--text-main) !important;
     transition: all 0.15s ease-in-out !important;
   }
   
   .neu-btn:hover {
-    background-color: #F9FAFB !important;
-    border-color: #D1D5DB !important;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.06) !important;
+    background-color: var(--hover) !important;
+    border-color: var(--border-strong) !important;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.08) !important;
   }
 
   .neu-btn:active, .neu-btn-active {
-    background-color: #F3F4F6 !important;
-    box-shadow: inset 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+    background-color: var(--hover) !important;
+    box-shadow: inset 0 1px 2px 0 rgba(0, 0, 0, 0.1) !important;
   }
 
   .neu-input {
-    background-color: #FFFFFF !important;
-    border: 1px solid #D1D5DB !important;
+    background-color: var(--bg-card) !important;
+    border: 1px solid var(--border-strong) !important;
     border-radius: 8px !important;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02) !important;
-    color: #111827 !important;
+    color: var(--text-main) !important;
   }
   
   .neu-input:focus {
-    border-color: #111827 !important;
-    box-shadow: 0 0 0 1px #111827 !important;
+    border-color: var(--text-main) !important;
+    box-shadow: 0 0 0 1px var(--text-main) !important;
     outline: none !important;
   }
 }

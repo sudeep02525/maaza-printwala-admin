@@ -76,19 +76,19 @@ export default function AdminSidebar() {
     const isCompact = !isMobile && isSidebarCollapsed;
 
     return (
-      <div className="flex flex-col h-full bg-white select-none">
+      <div className="flex flex-col h-full bg-[var(--sidebar-bg)] text-[var(--text-main)] select-none transition-colors">
         {/* Brand Logo Header */}
-        <div className="h-16 flex items-center justify-between px-6 border-b border-[#E5E7EB] shrink-0">
+        <div className="h-16 flex items-center justify-between px-6 border-b border-[var(--border)] shrink-0">
           <Link href="/" className="flex items-center gap-3 group overflow-hidden">
-            <div className="w-9 h-9 rounded-xl bg-[#111827] text-white flex items-center justify-center font-bold text-sm tracking-wider shadow-sm transition-transform group-hover:scale-105 shrink-0">
+            <div className="w-9 h-9 rounded-xl bg-[var(--text-main)] text-[var(--bg-card)] flex items-center justify-center font-bold text-sm tracking-wider shadow-sm transition-transform group-hover:scale-105 shrink-0">
               M
             </div>
             {!isCompact && (
               <div className="flex flex-col min-w-0">
-                <span className="font-bold text-[#111827] tracking-tight text-base leading-tight truncate">
+                <span className="font-bold text-[var(--text-main)] tracking-tight text-base leading-tight truncate">
                   Maaza Printwala
                 </span>
-                <span className="text-[11px] text-[#6B7280] font-medium tracking-wide">
+                <span className="text-[11px] text-[var(--text-muted)] font-medium tracking-wide">
                   Admin Console
                 </span>
               </div>
@@ -98,7 +98,7 @@ export default function AdminSidebar() {
           {isMobile && (
             <button
               onClick={closeMobileSidebar}
-              className="p-1.5 text-[#6B7280] hover:text-[#111827] hover:bg-[#F3F4F6] rounded-lg"
+              className="p-1.5 text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--hover)] rounded-lg transition-colors"
               title="Close Menu"
               aria-label="Close Navigation"
             >
@@ -111,13 +111,13 @@ export default function AdminSidebar() {
         {!isCompact && (
           <div className="px-4 pt-4 pb-2">
             <div className="relative">
-              <Search className="w-3.5 h-3.5 text-[#9CA3AF] absolute left-3 top-1/2 -translate-y-1/2" />
+              <Search className="w-3.5 h-3.5 text-[var(--text-faint)] absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={navSearch}
                 onChange={(e) => setNavSearch(e.target.value)}
                 placeholder="Search menu..."
-                className="w-full pl-8 pr-3 py-1.5 text-xs bg-[#F9FAFB] border border-[#E5E7EB] rounded-lg text-[#111827] placeholder-[#9CA3AF] focus:outline-none focus:border-[#111827] focus:bg-white transition-all"
+                className="w-full pl-8 pr-3 py-1.5 text-xs bg-[var(--bg-subtle)] border border-[var(--border)] rounded-lg text-[var(--text-main)] placeholder-[var(--text-faint)] focus:outline-none focus:border-[var(--text-main)] focus:bg-[var(--bg-card)] transition-all"
               />
             </div>
           </div>
@@ -135,7 +135,7 @@ export default function AdminSidebar() {
             return (
               <div key={group.title} className="space-y-1">
                 {!isCompact && (
-                  <div className="px-3 text-[10px] font-semibold text-[#9CA3AF] uppercase tracking-wider">
+                  <div className="px-3 text-[10px] font-semibold text-[var(--text-faint)] uppercase tracking-wider">
                     {group.title}
                   </div>
                 )}
@@ -151,11 +151,11 @@ export default function AdminSidebar() {
                         isCompact ? 'justify-center p-2.5' : 'gap-3 px-3 py-2'
                       } rounded-lg text-xs font-medium transition-all ${
                         isActive
-                          ? 'bg-[#111827] text-white font-semibold shadow-xs'
-                          : 'text-[#4B5563] hover:text-[#111827] hover:bg-[#F3F4F6]'
+                          ? 'bg-[var(--text-main)] text-[var(--bg-card)] font-semibold shadow-xs'
+                          : 'text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--hover)]'
                       }`}
                     >
-                      <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-[#6B7280]'}`} />
+                      <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-[var(--bg-card)]' : 'text-[var(--text-muted)]'}`} />
                       {!isCompact && <span className="truncate">{item.name}</span>}
                     </Link>
                   );
@@ -166,18 +166,18 @@ export default function AdminSidebar() {
         </nav>
 
         {/* User Profile / Logout */}
-        <div className="p-3.5 border-t border-[#E5E7EB] bg-[#F9FAFB] shrink-0">
+        <div className="p-3.5 border-t border-[var(--border)] bg-[var(--bg-subtle)] shrink-0 transition-colors">
           <div className="flex items-center justify-between">
             <div className={`flex items-center ${isCompact ? 'justify-center' : 'gap-2.5'} min-w-0`}>
-              <div className="w-8 h-8 rounded-full bg-[#111827] text-white flex items-center justify-center font-bold text-xs uppercase shadow-xs shrink-0">
+              <div className="w-8 h-8 rounded-full bg-[var(--text-main)] text-[var(--bg-card)] flex items-center justify-center font-bold text-xs uppercase shadow-xs shrink-0">
                 {user?.name?.charAt(0) || 'A'}
               </div>
               {!isCompact && (
                 <div className="min-w-0">
-                  <p className="text-xs font-semibold text-[#111827] truncate">
+                  <p className="text-xs font-semibold text-[var(--text-main)] truncate">
                     {user?.name || 'Administrator'}
                   </p>
-                  <p className="text-[11px] text-[#6B7280] truncate">
+                  <p className="text-[11px] text-[var(--text-muted)] truncate">
                     {user?.email || 'admin@maazaprintwala.com'}
                   </p>
                 </div>
@@ -187,7 +187,7 @@ export default function AdminSidebar() {
               <button
                 onClick={logout}
                 title="Log out"
-                className="p-1.5 rounded-lg text-[#6B7280] hover:text-[#111827] hover:bg-white border border-transparent hover:border-[#E5E7EB] transition-colors"
+                className="p-1.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card)] border border-transparent hover:border-[var(--border)] transition-colors"
               >
                 <LogOut className="w-4 h-4" />
               </button>
@@ -202,7 +202,7 @@ export default function AdminSidebar() {
     <>
       {/* 1. Desktop Fixed Sidebar */}
       <aside
-        className={`hidden md:flex flex-col h-screen border-r border-[#E5E7EB] shrink-0 transition-all duration-200 ${
+        className={`hidden md:flex flex-col h-screen border-r border-[var(--border)] shrink-0 transition-all duration-200 ${
           isSidebarCollapsed ? 'w-20' : 'w-64'
         }`}
       >
@@ -214,7 +214,7 @@ export default function AdminSidebar() {
         <div className="fixed inset-0 z-50 md:hidden">
           {/* Backdrop */}
           <div
-            className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity"
+            className="fixed inset-0 bg-black/50 backdrop-blur-xs transition-opacity"
             onClick={closeMobileSidebar}
           />
           {/* Slide-in Menu */}

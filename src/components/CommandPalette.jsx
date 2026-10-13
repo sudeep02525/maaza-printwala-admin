@@ -107,15 +107,15 @@ export default function CommandPalette() {
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity"
+        className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
         onClick={() => setCommandPaletteOpen(false)}
       />
 
       {/* Palette Modal */}
-      <div className="relative w-full max-w-xl bg-white rounded-2xl shadow-2xl border border-[#E5E7EB] overflow-hidden z-10 animate-in fade-in zoom-in-95 duration-150">
+      <div className="relative w-full max-w-xl bg-[var(--bg-card)] text-[var(--text-main)] rounded-2xl shadow-2xl border border-[var(--border)] overflow-hidden z-10 animate-in fade-in zoom-in-95 duration-150 transition-colors">
         {/* Search Input Bar */}
-        <div className="flex items-center px-4 border-b border-[#E5E7EB]">
-          <Search className="w-5 h-5 text-[#9CA3AF] shrink-0 mr-3" />
+        <div className="flex items-center px-4 border-b border-[var(--border)]">
+          <Search className="w-5 h-5 text-[var(--text-faint)] shrink-0 mr-3" />
           <input
             ref={inputRef}
             type="text"
@@ -126,17 +126,17 @@ export default function CommandPalette() {
             }}
             onKeyDown={handleKeyDown}
             placeholder="Type a page, command, or action... (↑↓ to navigate, Esc to close)"
-            className="w-full py-4 text-sm bg-transparent text-[#111827] placeholder-[#9CA3AF] focus:outline-none"
+            className="w-full py-4 text-sm bg-transparent text-[var(--text-main)] placeholder-[var(--text-faint)] focus:outline-none"
           />
-          <kbd className="hidden sm:inline-block px-2 py-0.5 text-[10px] font-semibold text-[#6B7280] bg-[#F3F4F6] border border-[#E5E7EB] rounded">
+          <kbd className="hidden sm:inline-block px-2 py-0.5 text-[10px] font-semibold text-[var(--text-muted)] bg-[var(--bg-subtle)] border border-[var(--border)] rounded">
             ESC
           </kbd>
         </div>
 
         {/* Results List */}
-        <div className="max-h-80 overflow-y-auto p-2 divide-y divide-[#F3F4F6]">
+        <div className="max-h-80 overflow-y-auto p-2 divide-y divide-[var(--border)]">
           {filteredCommands.length === 0 ? (
-            <div className="p-8 text-center text-xs text-[#9CA3AF]">
+            <div className="p-8 text-center text-xs text-[var(--text-muted)]">
               No matching pages or actions found.
             </div>
           ) : (
@@ -152,19 +152,19 @@ export default function CommandPalette() {
                     onMouseEnter={() => setSelectedIndex(index)}
                     className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-left text-xs transition-colors ${
                       isSelected
-                        ? 'bg-[#111827] text-white font-medium shadow-xs'
-                        : 'text-[#4B5563] hover:bg-[#F3F4F6]'
+                        ? 'bg-[var(--text-main)] text-[var(--bg-card)] font-medium shadow-xs'
+                        : 'text-[var(--text-muted)] hover:bg-[var(--hover)] hover:text-[var(--text-main)]'
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <Icon className={`w-4 h-4 shrink-0 ${isSelected ? 'text-white' : 'text-[#6B7280]'}`} />
+                      <Icon className={`w-4 h-4 shrink-0 ${isSelected ? 'text-[var(--bg-card)]' : 'text-[var(--text-muted)]'}`} />
                       <span className="font-medium">{cmd.name}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className={`text-[10px] ${isSelected ? 'text-gray-300' : 'text-[#9CA3AF]'}`}>
+                      <span className={`text-[10px] ${isSelected ? 'opacity-80' : 'text-[var(--text-faint)]'}`}>
                         {cmd.category}
                       </span>
-                      {isSelected && <ArrowRight className="w-3.5 h-3.5 text-white" />}
+                      {isSelected && <ArrowRight className="w-3.5 h-3.5 text-[var(--bg-card)]" />}
                     </div>
                   </button>
                 );
@@ -174,7 +174,7 @@ export default function CommandPalette() {
         </div>
 
         {/* Footer shortcuts helper */}
-        <div className="px-4 py-2 bg-[#F9FAFB] border-t border-[#E5E7EB] flex items-center justify-between text-[11px] text-[#9CA3AF]">
+        <div className="px-4 py-2 bg-[var(--bg-subtle)] border-t border-[var(--border)] flex items-center justify-between text-[11px] text-[var(--text-faint)]">
           <span>Navigate with arrows ↑↓</span>
           <span>Press Enter to select</span>
         </div>
