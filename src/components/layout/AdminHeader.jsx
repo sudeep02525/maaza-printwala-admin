@@ -1,44 +1,66 @@
 'use client';
 
-import { Bell, Search, ShieldCheck } from 'lucide-react';
+import React from 'react';
+import { Bell, ExternalLink, ShieldCheck, Sparkles } from 'lucide-react';
 import { useAdminAuthStore } from '../../store/adminAuthStore.js';
 
 export default function AdminHeader() {
   const { user } = useAdminAuthStore();
 
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 18) return 'Good afternoon';
+    return 'Good evening';
+  };
+
+  const adminFirstName = user?.name ? user.name.split(' ')[0] : 'Admin';
+
   return (
-    <header className="h-16 neu-flat flex items-center justify-between px-8 z-30 shadow-sm shrink-0">
-      {/* Search & Breadcrumbs */}
-      <div className="flex items-center gap-6 flex-1 max-w-md">
-        <div className="relative w-full">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-          <input
-            type="text"
-            placeholder="Search orders, products, customers... (Ctrl+K)"
-            className="w-full pl-9 pr-4 py-1.5 neu-flat   rounded-lg text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 transition-all neu-input"
-          />
+    <header className="h-16 bg-white border-b border-[#E5E7EB] flex items-center justify-between px-8 z-20 shrink-0">
+      {/* Left: Wix-style Personal Greeting */}
+      <div className="flex items-center gap-4">
+        <div>
+          <h1 className="text-base font-bold text-[#111827] flex items-center gap-2">
+            <span>{getGreeting()}, {adminFirstName}</span>
+            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#12B76A] bg-[#ECFDF3] px-2 py-0.5 rounded-full">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#12B76A]"></span>
+              Live
+            </span>
+          </h1>
+          <p className="text-[11px] text-[#6B7280]">
+            Welcome back to your printing business command center
+          </p>
         </div>
       </div>
 
-      {/* Right Controls */}
-      <div className="flex items-center gap-4">
-        {/* Environment Badge */}
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold neu-flat text-slate-700  ">
-          <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-          Live Production
-        </span>
-
-        {/* Security Role Badge */}
-        <div className="flex items-center gap-1.5 px-3 py-1 rounded-md neu-flat text-slate-700 text-xs font-medium  ">
-          <ShieldCheck className="w-4 h-4 text-slate-600" />
+      {/* Right: Actions & Tools */}
+      <div className="flex items-center gap-3">
+        {/* Role Badge */}
+        <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#F3F4F6] text-[#4B5563] text-xs font-medium">
+          <ShieldCheck className="w-3.5 h-3.5 text-[#6B7280]" />
           <span>{user?.role || 'ADMIN'}</span>
         </div>
 
         {/* Notifications */}
-        <button className="relative p-2 rounded-lg text-slate-500 hover:text-slate-700 hover:neu-flat transition-colors neu-btn">
-          <Bell className="w-5 h-5" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500 ring-2 ring-white"></span>
+        <button
+          className="relative p-2 rounded-lg text-[#6B7280] hover:text-[#111827] hover:bg-[#F3F4F6] transition-colors"
+          title="Notifications"
+        >
+          <Bell className="w-4 h-4" />
+          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#F04438] ring-2 ring-white"></span>
         </button>
+
+        {/* Primary Wix Pill Button: Open Site */}
+        <a
+          href="http://localhost:3000"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold bg-[#111827] text-white hover:bg-black transition-all shadow-sm"
+        >
+          <span>Open Site</span>
+          <ExternalLink className="w-3.5 h-3.5" />
+        </a>
       </div>
     </header>
   );

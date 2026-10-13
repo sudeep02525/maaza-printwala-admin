@@ -24,9 +24,9 @@ export default function AdminShell({ children }) {
   return (
     <>
       <AdminSidebar />
-      <div className="flex-1 flex flex-col h-screen min-w-0 overflow-hidden">
+      <div className="flex-1 flex flex-col h-screen min-w-0 overflow-hidden bg-[#F5F7F9]">
         <AdminHeader />
-        <main className="flex-1 p-8 overflow-y-auto">{children}</main>
+        <main className="flex-1 p-6 md:p-8 overflow-y-auto no-scrollbar bg-[#F5F7F9]">{children}</main>
       </div>
     </>
   );

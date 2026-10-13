@@ -14,7 +14,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${inter.variable}`}>
-      <body className="text-slate-800 font-sans antialiased h-screen overflow-hidden flex bg-[#E0E5EC]">
+      <body className="text-[#111827] font-sans antialiased h-screen overflow-hidden flex bg-[#F5F7F9]">
         <QueryProvider>
           <AdminShell>{children}</AdminShell>
           <Toaster position="top-right" />
