@@ -16,15 +16,19 @@ import {
   Ticket,
   Headphones,
   Star,
+  BarChart3,
+  Truck,
 } from 'lucide-react';
 import { useAdminAuthStore } from '../../store/adminAuthStore.js';
 
 const navItems = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
+  { name: 'Reports & Sales', href: '/reports', icon: BarChart3 },
   { name: 'Orders & QC', href: '/orders', icon: ShoppingCart },
   { name: 'Products', href: '/products', icon: Package },
   { name: 'Categories & SEO', href: '/categories', icon: FolderTree },
   { name: 'Coupons & Promo', href: '/coupons', icon: Ticket },
+  { name: 'Delivery Rules', href: '/delivery-rules', icon: Truck },
   { name: 'Support & B2B Leads', href: '/support', icon: Headphones },
   { name: 'Reviews', href: '/reviews', icon: Star },
   { name: 'Customers', href: '/customers', icon: Users },
