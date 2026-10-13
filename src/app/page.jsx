@@ -23,6 +23,7 @@ import {
   ChevronRight,
   RefreshCw,
   Plus,
+  Download,
 } from 'lucide-react';
 import axiosInstance from '../services/axiosInstance.js';
 import { useAdminAuthStore } from '../store/adminAuthStore.js';
@@ -80,7 +81,7 @@ const build30DaysTimeline = (dailySales = []) => {
 
 export default function AdminDashboardPage() {
   const { user } = useAdminAuthStore();
-  const [timeFilter, setTimeFilter] = useState('Month'); // 'Day' | 'Week' | 'Month'
+  const [timeFilter, setTimeFilter] = useState('Month'); // 'Day' | 'Week' | 'Month' | 'Year'
   const [activeChartPoint, setActiveChartPoint] = useState(null);
 
   // Real API query for admin dashboard statistics
@@ -110,6 +111,22 @@ export default function AdminDashboardPage() {
     const maxVal = Math.max(...timelineData.map((d) => d.revenue), 0);
     return maxVal > 0 ? maxVal : 10000;
   }, [timelineData]);
+
+  // Export CSV Handler
+  const handleExportCSV = () => {
+    const headers = ['Date', 'Orders', 'Revenue (INR)'];
+    const rows = timelineData.map((d) => [d.date, d.orders, d.revenue]);
+    const csvContent =
+      'data:text/csv;charset=utf-8,' +
+      [headers.join(','), ...rows.map((e) => e.join(','))].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `maaza_sales_report_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   // Loading skeleton
   if (isStatsLoading) {
@@ -216,10 +233,10 @@ export default function AdminDashboardPage() {
       {/* =========================================================================
           Top Header: Greeting, Overview Performance Title, and Time Filter Tabs
       ========================================================================= */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-[12px] border border-[#E5E7EB] shadow-[0_1px_3px_0_rgba(0,0,0,0.04)]">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-5 sm:p-6 rounded-[12px] border border-[#E5E7EB] shadow-[0_1px_3px_0_rgba(0,0,0,0.04)]">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-bold text-[#111827]">Hello, {adminName}</h1>
+            <h1 className="text-lg sm:text-xl font-bold text-[#111827]">Hello, {adminName}</h1>
             <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#ECFDF3] text-[#12B76A]">
               <span className="w-1.5 h-1.5 rounded-full bg-[#12B76A]"></span>
               Live Storefront Connected
@@ -230,10 +247,10 @@ export default function AdminDashboardPage() {
           </p>
         </div>
 
-        {/* Wix-style Filter Pills: Day | Week | Month */}
-        <div className="flex items-center gap-2">
+        {/* Wix-style Filter Pills: Day | Week | Month | Year */}
+        <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
           <div className="inline-flex p-1 bg-[#F3F4F6] rounded-lg border border-[#E5E7EB]">
-            {['Day', 'Week', 'Month'].map((filter) => (
+            {['Day', 'Week', 'Month', 'Year'].map((filter) => (
               <button
                 key={filter}
                 onClick={() => setTimeFilter(filter)}
@@ -261,14 +278,17 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* =========================================================================
-          4 Overview Cards (Wix-Style): Orders | Revenue | Customers | Artwork
+          4 Overview Cards (Wix-Style, Clickable): Orders | Revenue | Customers | Artwork
       ========================================================================= */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Card 1: Orders */}
-        <div className="bg-white p-5 rounded-[12px] border border-[#E5E7EB] shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] flex flex-col justify-between hover:border-[#D1D5DB] transition-all">
+        {/* Card 1: Orders (Clickable to /orders) */}
+        <Link
+          href="/orders"
+          className="bg-white p-5 rounded-[12px] border border-[#E5E7EB] shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] flex flex-col justify-between hover:border-[#9CA3AF] hover:shadow-sm transition-all group cursor-pointer"
+        >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-[#6B7280]">Orders</span>
-            <span className="p-2 rounded-lg bg-[#F9FAFB] text-[#111827] border border-[#E5E7EB]">
+            <span className="text-xs font-semibold text-[#6B7280] group-hover:text-[#111827] transition-colors">Orders</span>
+            <span className="p-2 rounded-lg bg-[#F9FAFB] text-[#111827] border border-[#E5E7EB] group-hover:bg-[#F3F4F6]">
               <ShoppingCart className="w-4 h-4 text-[#4B5563]" />
             </span>
           </div>
@@ -299,17 +319,23 @@ export default function AdminDashboardPage() {
               </span>
               <span className="text-[11px] text-[#6B7280]">from last 7 days</span>
             </div>
-            <p className="text-[11px] text-[#9CA3AF] mt-1.5 font-medium">
-              {stats.todayOrders} new order{stats.todayOrders !== 1 ? 's' : ''} today
+            <p className="text-[11px] text-[#9CA3AF] mt-1.5 font-medium flex items-center justify-between">
+              <span>{stats.todayOrders} new order{stats.todayOrders !== 1 ? 's' : ''} today</span>
+              <span className="text-[10px] text-[#111827] font-semibold opacity-0 group-hover:opacity-100 transition-opacity flex items-center">
+                View →
+              </span>
             </p>
           </div>
-        </div>
+        </Link>
 
-        {/* Card 2: Revenue */}
-        <div className="bg-white p-5 rounded-[12px] border border-[#E5E7EB] shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] flex flex-col justify-between hover:border-[#D1D5DB] transition-all">
+        {/* Card 2: Revenue (Clickable to /reports) */}
+        <Link
+          href="/reports"
+          className="bg-white p-5 rounded-[12px] border border-[#E5E7EB] shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] flex flex-col justify-between hover:border-[#9CA3AF] hover:shadow-sm transition-all group cursor-pointer"
+        >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-[#6B7280]">Revenue</span>
-            <span className="p-2 rounded-lg bg-[#F9FAFB] text-[#111827] border border-[#E5E7EB]">
+            <span className="text-xs font-semibold text-[#6B7280] group-hover:text-[#111827] transition-colors">Revenue</span>
+            <span className="p-2 rounded-lg bg-[#F9FAFB] text-[#111827] border border-[#E5E7EB] group-hover:bg-[#F3F4F6]">
               <DollarSign className="w-4 h-4 text-[#4B5563]" />
             </span>
           </div>
@@ -340,17 +366,23 @@ export default function AdminDashboardPage() {
               </span>
               <span className="text-[11px] text-[#6B7280]">from last 7 days</span>
             </div>
-            <p className="text-[11px] text-[#9CA3AF] mt-1.5 font-medium">
-              {formatCurrency(stats.revenueToday)} gained today
+            <p className="text-[11px] text-[#9CA3AF] mt-1.5 font-medium flex items-center justify-between">
+              <span>{formatCurrency(stats.revenueToday)} gained today</span>
+              <span className="text-[10px] text-[#111827] font-semibold opacity-0 group-hover:opacity-100 transition-opacity flex items-center">
+                Reports →
+              </span>
             </p>
           </div>
-        </div>
+        </Link>
 
-        {/* Card 3: Customers */}
-        <div className="bg-white p-5 rounded-[12px] border border-[#E5E7EB] shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] flex flex-col justify-between hover:border-[#D1D5DB] transition-all">
+        {/* Card 3: Customers (Clickable to /customers) */}
+        <Link
+          href="/customers"
+          className="bg-white p-5 rounded-[12px] border border-[#E5E7EB] shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] flex flex-col justify-between hover:border-[#9CA3AF] hover:shadow-sm transition-all group cursor-pointer"
+        >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-[#6B7280]">Customers</span>
-            <span className="p-2 rounded-lg bg-[#F9FAFB] text-[#111827] border border-[#E5E7EB]">
+            <span className="text-xs font-semibold text-[#6B7280] group-hover:text-[#111827] transition-colors">Customers</span>
+            <span className="p-2 rounded-lg bg-[#F9FAFB] text-[#111827] border border-[#E5E7EB] group-hover:bg-[#F3F4F6]">
               <Users className="w-4 h-4 text-[#4B5563]" />
             </span>
           </div>
@@ -377,17 +409,23 @@ export default function AdminDashboardPage() {
               </span>
               <span className="text-[11px] text-[#6B7280]">from last 7 days</span>
             </div>
-            <p className="text-[11px] text-[#9CA3AF] mt-1.5 font-medium">
-              {stats.growth.usersThisWeek > 0 ? `+${stats.growth.usersThisWeek} new this week` : 'Authoritative registered base'}
+            <p className="text-[11px] text-[#9CA3AF] mt-1.5 font-medium flex items-center justify-between">
+              <span>{stats.growth.usersThisWeek > 0 ? `+${stats.growth.usersThisWeek} new this week` : 'Authoritative registered base'}</span>
+              <span className="text-[10px] text-[#111827] font-semibold opacity-0 group-hover:opacity-100 transition-opacity flex items-center">
+                List →
+              </span>
             </p>
           </div>
-        </div>
+        </Link>
 
-        {/* Card 4: Pending Artwork */}
-        <div className="bg-white p-5 rounded-[12px] border border-[#E5E7EB] shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] flex flex-col justify-between hover:border-[#D1D5DB] transition-all">
+        {/* Card 4: Pending Artwork (Clickable to /orders) */}
+        <Link
+          href="/orders"
+          className="bg-white p-5 rounded-[12px] border border-[#E5E7EB] shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] flex flex-col justify-between hover:border-[#9CA3AF] hover:shadow-sm transition-all group cursor-pointer"
+        >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-[#6B7280]">Pending Artwork</span>
-            <span className="p-2 rounded-lg bg-[#F9FAFB] text-[#111827] border border-[#E5E7EB]">
+            <span className="text-xs font-semibold text-[#6B7280] group-hover:text-[#111827] transition-colors">Pending Artwork</span>
+            <span className="p-2 rounded-lg bg-[#F9FAFB] text-[#111827] border border-[#E5E7EB] group-hover:bg-[#F3F4F6]">
               <FileCheck className="w-4 h-4 text-[#4B5563]" />
             </span>
           </div>
@@ -407,17 +445,14 @@ export default function AdminDashboardPage() {
             <div className="mt-2 flex items-center gap-1.5">
               <span className="text-[11px] text-[#6B7280]">Pre-press check required</span>
             </div>
-            <div className="mt-1.5">
-              <Link
-                href="/orders"
-                className="text-[11px] font-semibold text-[#111827] hover:underline inline-flex items-center gap-1"
-              >
+            <div className="mt-1.5 flex items-center justify-between">
+              <span className="text-[11px] font-semibold text-[#111827] group-hover:underline inline-flex items-center gap-1">
                 <span>Review files now</span>
                 <ArrowRight className="w-3 h-3" />
-              </Link>
+              </span>
             </div>
           </div>
-        </div>
+        </Link>
       </div>
 
       {/* =========================================================================
@@ -429,14 +464,22 @@ export default function AdminDashboardPage() {
         <div className="lg:col-span-2 space-y-6">
           
           {/* Revenue Card + 30-Day Time-Series Chart */}
-          <div className="bg-white p-6 rounded-[12px] border border-[#E5E7EB] shadow-[0_1px_3px_0_rgba(0,0,0,0.04)]">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-[#F3F4F6]">
+          <div className="bg-white p-5 sm:p-6 rounded-[12px] border border-[#E5E7EB] shadow-[0_1px_3px_0_rgba(0,0,0,0.04)]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#F3F4F6]">
               <div>
                 <div className="flex items-center gap-2">
                   <h2 className="text-base font-bold text-[#111827]">Revenue</h2>
                   <span className="px-2 py-0.5 text-[11px] font-semibold rounded-md bg-[#F3F4F6] text-[#4B5563]">
                     Last 30d
                   </span>
+                  <button
+                    onClick={handleExportCSV}
+                    className="inline-flex items-center gap-1 px-2.5 py-0.5 text-[11px] font-semibold rounded-md bg-[#F9FAFB] hover:bg-[#F3F4F6] text-[#111827] border border-[#E5E7EB] transition-colors ml-1"
+                    title="Export 30-Day Sales Data as CSV"
+                  >
+                    <Download className="w-3 h-3 text-[#6B7280]" />
+                    <span>Export CSV</span>
+                  </button>
                 </div>
                 <p className="text-xs text-[#6B7280] mt-0.5">Authoritative volume across storefront orders</p>
               </div>
@@ -575,7 +618,7 @@ export default function AdminDashboardPage() {
           </div>
 
           {/* Operational Workflow Status Pipeline */}
-          <div className="bg-white p-6 rounded-[12px] border border-[#E5E7EB] shadow-[0_1px_3px_0_rgba(0,0,0,0.04)]">
+          <div className="bg-white p-5 sm:p-6 rounded-[12px] border border-[#E5E7EB] shadow-[0_1px_3px_0_rgba(0,0,0,0.04)]">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="text-sm font-bold text-[#111827]">Order Fulfillment Pipeline</h3>
@@ -643,7 +686,7 @@ export default function AdminDashboardPage() {
             </div>
           </div>
 
-          {/* Recent Orders Table (Authoritative Real Records) */}
+          {/* Recent Orders Table (Authoritative Real Records with thin scrollbar) */}
           <div className="bg-white rounded-[12px] border border-[#E5E7EB] shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] overflow-hidden">
             <div className="p-5 flex items-center justify-between border-b border-[#F3F4F6]">
               <div>
@@ -665,15 +708,24 @@ export default function AdminDashboardPage() {
                   <ShoppingCart className="w-5 h-5" />
                 </div>
                 <p className="text-sm font-semibold text-[#111827]">No customer orders placed yet</p>
-                <p className="text-xs text-[#6B7280] mt-1">
+                <p className="text-xs text-[#6B7280] mt-1 mb-4">
                   Once customers place orders on your storefront, they will immediately appear here.
                 </p>
+                <a
+                  href="http://localhost:3000"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#111827] text-white hover:bg-black transition-colors"
+                >
+                  <span>Visit Storefront</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
               </div>
             ) : (
-              <div className="overflow-x-auto no-scrollbar">
+              <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="bg-[#F9FAFB] border-b border-[#E5E7EB] text-[11px] uppercase font-bold text-[#6B7280] tracking-wider">
+                    <tr className="bg-[#F9FAFB] border-b border-[#E5E7EB] text-[11px] uppercase font-bold text-[#6B7280] tracking-wider sticky top-0">
                       <th className="py-3 px-5">Order #</th>
                       <th className="py-3 px-5">Client / Account</th>
                       <th className="py-3 px-5">Specification</th>
