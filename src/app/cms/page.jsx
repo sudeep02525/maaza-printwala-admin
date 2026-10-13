@@ -74,8 +74,8 @@ export default function CMSPage() {
   return (
     <div className="max-w-5xl space-y-6">
       <div>
-        <h1 className="text-2xl font-black text-slate-700">Content Management (CMS)</h1>
-        <p className="text-sm text-slate-500 mt-1">Manage homepage sliders, banners, and dynamic content.</p>
+        <h1 className="text-2xl font-black text-[var(--text-main)]">Content Management (CMS)</h1>
+        <p className="text-sm text-[var(--text-muted)] mt-1">Manage homepage sliders, banners, and dynamic content.</p>
       </div>
 
       <div className="neu-flat rounded-2xl    overflow-hidden flex flex-col md:flex-row min-h-[600px]">
@@ -83,19 +83,19 @@ export default function CMSPage() {
         <div className="w-full md:w-64  md:border-b-0 md:  neu-flat p-4 space-y-2">
           <button 
             onClick={() => setActiveTab('hero')} 
-            className={`w-full text-left px-4 py-3 rounded-xl font-bold text-sm transition-colors ${activeTab === 'hero' ? 'neu-flat    text-[#0082CA]' : 'text-slate-600 hover:neu-flat/50  border-transparent'}`}
+            className={`w-full text-left px-4 py-3 rounded-xl font-bold text-sm transition-colors ${activeTab === 'hero' ? 'neu-flat    text-[#0082CA]' : 'text-[var(--text-muted)] hover:neu-flat/50  border-transparent'}`}
           >
             Hero Slider
           </button>
           <button 
             onClick={() => setActiveTab('banners')} 
-            className={`w-full text-left px-4 py-3 rounded-xl font-bold text-sm transition-colors ${activeTab === 'banners' ? 'neu-flat    text-[#0082CA]' : 'text-slate-600 hover:neu-flat/50  border-transparent'}`}
+            className={`w-full text-left px-4 py-3 rounded-xl font-bold text-sm transition-colors ${activeTab === 'banners' ? 'neu-flat    text-[#0082CA]' : 'text-[var(--text-muted)] hover:neu-flat/50  border-transparent'}`}
           >
             Promotional Banners
           </button>
           <button 
             onClick={() => setActiveTab('footer')} 
-            className={`w-full text-left px-4 py-3 rounded-xl font-bold text-sm transition-colors ${activeTab === 'footer' ? 'neu-flat    text-[#0082CA]' : 'text-slate-600 hover:neu-flat/50  border-transparent'}`}
+            className={`w-full text-left px-4 py-3 rounded-xl font-bold text-sm transition-colors ${activeTab === 'footer' ? 'neu-flat    text-[#0082CA]' : 'text-[var(--text-muted)] hover:neu-flat/50  border-transparent'}`}
           >
             Footer Links & Policies
           </button>
@@ -104,12 +104,12 @@ export default function CMSPage() {
         {/* Content Area */}
         <div className="flex-1 p-6 md:p-8 overflow-y-auto">
           {isFetching ? (
-            <div className="flex items-center justify-center h-full text-slate-500">Loading CMS Data...</div>
+            <div className="flex items-center justify-center h-full text-[var(--text-muted)]">Loading CMS Data...</div>
           ) : activeTab === 'hero' ? (
             <div className="space-y-6 max-w-3xl">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-bold text-slate-700">Hero Slider</h2>
-                <button onClick={addSlide} className="px-4 py-2 neu-flat text-slate-700 font-bold text-xs rounded-lg hover:neu-flat transition-colors flex items-center gap-2 neu-btn">
+                <h2 className="text-lg font-bold text-[var(--text-main)]">Hero Slider</h2>
+                <button onClick={addSlide} className="px-4 py-2 neu-flat text-[var(--text-main)] font-bold text-xs rounded-lg hover:neu-flat transition-colors flex items-center gap-2 neu-btn">
                   <Plus className="w-3.5 h-3.5" /> Add Slide
                 </button>
               </div>
@@ -117,7 +117,7 @@ export default function CMSPage() {
               <div className="space-y-4">
                 {heroSlides.map((slide, index) => (
                   <div key={index} className="neu-flat   rounded-xl p-4 flex gap-4 group">
-                    <div className="cursor-move pt-2 text-slate-300 hover:text-slate-500">
+                    <div className="cursor-move pt-2 text-[var(--text-faint)] hover:text-[var(--text-muted)]">
                       <GripVertical className="w-5 h-5" />
                     </div>
                     <div className="flex-1 space-y-4">
@@ -126,34 +126,34 @@ export default function CMSPage() {
                           {slide.image ? (
                             <img src={slide.image} className="w-full h-full object-cover" alt="slide" />
                           ) : (
-                            <ImageIcon className="w-6 h-6 text-slate-400" />
+                            <ImageIcon className="w-6 h-6 text-[var(--text-faint)]" />
                           )}
                         </div>
                         <div className="flex-1">
-                          <label className="block text-xs font-bold text-slate-700 mb-1.5">Image URL</label>
-                          <input type="text" value={slide.image} onChange={e => updateSlide(index, 'image', e.target.value)} className="w-full px-3 py-2 neu-flat   rounded-lg focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 outline-none text-sm" placeholder="https://..." />
+                          <label className="block text-xs font-bold text-[var(--text-main)] mb-1.5">Image URL</label>
+                          <input type="text" value={slide.image} onChange={e => updateSlide(index, 'image', e.target.value)} className="w-full px-3 py-2 neu-flat   rounded-lg focus:ring-2 focus:ring-[var(--border-strong)] focus:border-[var(--text-main)] outline-none text-sm" placeholder="https://..." />
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-xs font-bold text-slate-700 mb-1.5">Title</label>
-                          <input type="text" value={slide.title} onChange={e => updateSlide(index, 'title', e.target.value)} className="w-full px-3 py-2 neu-flat   rounded-lg focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 outline-none text-sm" />
+                          <label className="block text-xs font-bold text-[var(--text-main)] mb-1.5">Title</label>
+                          <input type="text" value={slide.title} onChange={e => updateSlide(index, 'title', e.target.value)} className="w-full px-3 py-2 neu-flat   rounded-lg focus:ring-2 focus:ring-[var(--border-strong)] focus:border-[var(--text-main)] outline-none text-sm" />
                         </div>
                         <div>
-                          <label className="block text-xs font-bold text-slate-700 mb-1.5">Subtitle</label>
-                          <input type="text" value={slide.subtitle} onChange={e => updateSlide(index, 'subtitle', e.target.value)} className="w-full px-3 py-2 neu-flat   rounded-lg focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 outline-none text-sm" />
+                          <label className="block text-xs font-bold text-[var(--text-main)] mb-1.5">Subtitle</label>
+                          <input type="text" value={slide.subtitle} onChange={e => updateSlide(index, 'subtitle', e.target.value)} className="w-full px-3 py-2 neu-flat   rounded-lg focus:ring-2 focus:ring-[var(--border-strong)] focus:border-[var(--text-main)] outline-none text-sm" />
                         </div>
                         <div>
-                          <label className="block text-xs font-bold text-slate-700 mb-1.5">CTA Text</label>
-                          <input type="text" value={slide.ctaText} onChange={e => updateSlide(index, 'ctaText', e.target.value)} className="w-full px-3 py-2 neu-flat   rounded-lg focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 outline-none text-sm" />
+                          <label className="block text-xs font-bold text-[var(--text-main)] mb-1.5">CTA Text</label>
+                          <input type="text" value={slide.ctaText} onChange={e => updateSlide(index, 'ctaText', e.target.value)} className="w-full px-3 py-2 neu-flat   rounded-lg focus:ring-2 focus:ring-[var(--border-strong)] focus:border-[var(--text-main)] outline-none text-sm" />
                         </div>
                         <div>
-                          <label className="block text-xs font-bold text-slate-700 mb-1.5">CTA Link</label>
-                          <input type="text" value={slide.ctaLink} onChange={e => updateSlide(index, 'ctaLink', e.target.value)} className="w-full px-3 py-2 neu-flat   rounded-lg focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 outline-none text-sm" />
+                          <label className="block text-xs font-bold text-[var(--text-main)] mb-1.5">CTA Link</label>
+                          <input type="text" value={slide.ctaLink} onChange={e => updateSlide(index, 'ctaLink', e.target.value)} className="w-full px-3 py-2 neu-flat   rounded-lg focus:ring-2 focus:ring-[var(--border-strong)] focus:border-[var(--text-main)] outline-none text-sm" />
                         </div>
                       </div>
                     </div>
-                    <button onClick={() => removeSlide(index)} className="p-2 h-fit text-slate-400 hover:text-rose-600 neu-flat rounded-lg transition-colors mt-1 opacity-0 group-hover:opacity-100">
+                    <button onClick={() => removeSlide(index)} className="p-2 h-fit text-[var(--text-faint)] hover:text-rose-600 neu-flat rounded-lg transition-colors mt-1 opacity-0 group-hover:opacity-100">
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
@@ -161,7 +161,7 @@ export default function CMSPage() {
               </div>
 
               <div className="pt-6   flex justify-end">
-                <button onClick={handleSaveHero} disabled={saveMutation.isPending} className="px-6 py-2.5 neu-btn text-[#0082CA] hover:bg-[#0068A2] text-slate-700 font-bold text-sm rounded-xl transition-colors  flex items-center gap-2 disabled:opacity-70 neu-btn">
+                <button onClick={handleSaveHero} disabled={saveMutation.isPending} className="px-6 py-2.5 neu-btn text-[#0082CA] hover:bg-[#0068A2] text-[var(--text-main)] font-bold text-sm rounded-xl transition-colors  flex items-center gap-2 disabled:opacity-70 neu-btn">
                   <Save className="w-4 h-4" /> {saveMutation.isPending ? 'Saving...' : 'Save Hero Slider'}
                 </button>
               </div>
@@ -169,10 +169,10 @@ export default function CMSPage() {
           ) : (
             <div className="flex items-center justify-center h-full flex-col">
               <div className="w-16 h-16 neu-flat rounded-full flex items-center justify-center   mb-4">
-                <ImageIcon className="w-6 h-6 text-slate-300" />
+                <ImageIcon className="w-6 h-6 text-[var(--text-faint)]" />
               </div>
-              <h3 className="text-lg font-bold text-slate-700">Module Coming Soon</h3>
-              <p className="text-sm text-slate-500 mt-1 max-w-sm text-center">This CMS section is under development. It will be available in the next sprint.</p>
+              <h3 className="text-lg font-bold text-[var(--text-main)]">Module Coming Soon</h3>
+              <p className="text-sm text-[var(--text-muted)] mt-1 max-w-sm text-center">This CMS section is under development. It will be available in the next sprint.</p>
             </div>
           )}
         </div>

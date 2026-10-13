@@ -38,10 +38,10 @@ export default function CategoriesPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 neu-flat p-6 rounded-2xl   ">
         <div>
-          <h1 className="text-2xl font-black text-slate-700">Categories & SEO</h1>
-          <p className="text-sm text-slate-500 mt-1">Manage product categories, subcategories, and category-level SEO.</p>
+          <h1 className="text-2xl font-black text-[var(--text-main)]">Categories & SEO</h1>
+          <p className="text-sm text-[var(--text-muted)] mt-1">Manage product categories, subcategories, and category-level SEO.</p>
         </div>
-        <Link href="/categories/add" className="px-5 py-2.5  text-slate-700 font-bold text-sm rounded-xl hover:bg-slate-800 transition-colors flex items-center gap-2  neu-btn">
+        <Link href="/categories/add" className="px-5 py-2.5  text-[var(--text-main)] font-bold text-sm rounded-xl hover:bg-[var(--hover)] transition-colors flex items-center gap-2  neu-btn">
           <Plus className="w-4 h-4" /> Add Category
         </Link>
       </div>
@@ -49,13 +49,13 @@ export default function CategoriesPage() {
       {/* Toolbar */}
       <div className="neu-flat p-4 rounded-xl    flex flex-col sm:flex-row gap-4 justify-between items-center">
         <div className="relative w-full sm:w-96">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-faint)]" />
           <input 
             type="text" 
             placeholder="Search categories..." 
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 neu-flat   rounded-xl focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 outline-none text-sm transition-all"
+            className="w-full pl-10 pr-4 py-2.5 neu-flat   rounded-xl focus:ring-2 focus:ring-[var(--border-strong)] focus:border-[var(--text-main)] outline-none text-sm transition-all"
           />
         </div>
       </div>
@@ -65,7 +65,7 @@ export default function CategoriesPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="  neu-flat/50 text-[11px] font-extrabold uppercase tracking-wider text-slate-500">
+              <tr className="  neu-flat/50 text-[11px] font-extrabold uppercase tracking-wider text-[var(--text-muted)]">
                 <th className="px-6 py-4">Category</th>
                 <th className="px-6 py-4">Slug</th>
                 <th className="px-6 py-4">Status</th>
@@ -73,14 +73,14 @@ export default function CategoriesPage() {
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 text-sm">
+            <tbody className="divide-y divide-[var(--border)] text-sm">
               {isLoading ? (
                 <tr>
-                  <td colSpan="5" className="px-6 py-8 text-center text-slate-500 font-medium">Loading categories...</td>
+                  <td colSpan="5" className="px-6 py-8 text-center text-[var(--text-muted)] font-medium">Loading categories...</td>
                 </tr>
               ) : filteredCategories.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="px-6 py-8 text-center text-slate-500 font-medium">No categories found.</td>
+                  <td colSpan="5" className="px-6 py-8 text-center text-[var(--text-muted)] font-medium">No categories found.</td>
                 </tr>
               ) : (
                 filteredCategories.map(cat => (
@@ -91,34 +91,34 @@ export default function CategoriesPage() {
                           {cat.image ? (
                             <img src={cat.image} alt={cat.name} className="w-full h-full object-cover rounded-lg" />
                           ) : (
-                            <ImageIcon className="w-4 h-4 text-slate-400" />
+                            <ImageIcon className="w-4 h-4 text-[var(--text-faint)]" />
                           )}
                         </div>
-                        <span className="font-bold text-slate-700">{cat.name}</span>
+                        <span className="font-bold text-[var(--text-main)]">{cat.name}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 font-mono text-xs text-slate-500">{cat.slug}</td>
+                    <td className="px-6 py-4 font-mono text-xs text-[var(--text-muted)]">{cat.slug}</td>
                     <td className="px-6 py-4">
-                      <span className={`px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${cat.isActive !== false ? 'bg-emerald-50 text-emerald-600' : 'neu-flat text-slate-500'}`}>
+                      <span className={`px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${cat.isActive !== false ? 'bg-emerald-500/10 text-[var(--accent-green)] border border-emerald-500/20' : 'neu-flat text-[var(--text-muted)]'}`}>
                         {cat.isActive !== false ? 'Active' : 'Inactive'}
                       </span>
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex flex-col gap-1">
-                        <span className={`text-[10px] font-bold uppercase ${cat.metaTitle ? 'text-emerald-500' : 'text-slate-400'}`}>
+                        <span className={`text-[10px] font-bold uppercase ${cat.metaTitle ? 'text-emerald-500' : 'text-[var(--text-faint)]'}`}>
                           Meta Data: {cat.metaTitle ? 'Yes' : 'No'}
                         </span>
-                        <span className={`text-[10px] font-bold uppercase ${cat.seoContent ? 'text-emerald-500' : 'text-slate-400'}`}>
+                        <span className={`text-[10px] font-bold uppercase ${cat.seoContent ? 'text-emerald-500' : 'text-[var(--text-faint)]'}`}>
                           SEO Content: {cat.seoContent ? 'Yes' : 'No'}
                         </span>
                       </div>
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Link href={`/categories/edit/${cat._id || cat.slug}`} className="p-2 text-slate-400 hover:text-[#0082CA] hover:bg-blue-50 rounded-lg transition-colors">
+                        <Link href={`/categories/edit/${cat._id || cat.slug}`} className="p-2 text-[var(--text-faint)] hover:text-[#0082CA] hover:bg-blue-500/10 rounded-lg transition-colors">
                           <Edit2 className="w-4 h-4" />
                         </Link>
-                        <button onClick={() => handleDelete(cat._id || cat.slug)} className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors">
+                        <button onClick={() => handleDelete(cat._id || cat.slug)} className="p-2 text-[var(--text-faint)] hover:text-rose-600 hover:bg-red-500/10 rounded-lg transition-colors">
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>

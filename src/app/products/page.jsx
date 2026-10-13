@@ -44,19 +44,19 @@ export default function AdminProducts() {
     }
   };
 
-  if (isLoading) return <div className="text-slate-500">Loading products...</div>;
+  if (isLoading) return <div className="text-[var(--text-muted)]">Loading products...</div>;
   if (error) return <div className="text-red-500">{error}</div>;
 
   return (
     <div className="space-y-6 max-w-7xl">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 neu-flat p-6 rounded-2xl  /80 ">
         <div>
-          <h1 className="text-2xl font-black text-slate-700">Products Catalogue</h1>
-          <p className="text-sm text-slate-600 mt-1 font-normal">Manage all your print products, pricing, and active status.</p>
+          <h1 className="text-2xl font-black text-[var(--text-main)]">Products Catalogue</h1>
+          <p className="text-sm text-[var(--text-muted)] mt-1 font-normal">Manage all your print products, pricing, and active status.</p>
         </div>
         <Link 
           href="/products/add" 
-          className="flex items-center gap-2 neu-flat text-slate-700 px-5 py-2.5 rounded-xl text-sm font-bold  hover:bg-slate-300 transition-colors"
+          className="flex items-center gap-2 neu-flat text-[var(--text-main)] px-5 py-2.5 rounded-xl text-sm font-bold  hover:bg-[var(--border-strong)] transition-colors"
         >
           <Plus className="w-4 h-4" />
           Add Product
@@ -67,7 +67,7 @@ export default function AdminProducts() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="neu-flat text-slate-500 text-[11px] uppercase font-extrabold tracking-wider  ">
+              <tr className="neu-flat text-[var(--text-muted)] text-[11px] uppercase font-extrabold tracking-wider  ">
                 <th className="py-4 px-6">Image</th>
                 <th className="py-4 px-6">Product Info</th>
                 <th className="py-4 px-6">Category</th>
@@ -76,7 +76,7 @@ export default function AdminProducts() {
                 <th className="py-4 px-6 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 text-sm">
+            <tbody className="divide-y divide-[var(--border)] text-sm">
               {products.map((product) => (
                 <tr key={product._id} className="hover:neu-flat/75 transition-colors">
                   <td className="py-4 px-6">
@@ -88,27 +88,27 @@ export default function AdminProducts() {
                         onError={(e) => { e.target.src = '/placeholder.png' }}
                       />
                     ) : (
-                      <div className="w-12 h-12 neu-flat rounded-xl flex items-center justify-center text-slate-400  ">
+                      <div className="w-12 h-12 neu-flat rounded-xl flex items-center justify-center text-[var(--text-faint)]  ">
                         <ImageIcon className="w-5 h-5" />
                       </div>
                     )}
                   </td>
                   <td className="py-4 px-6">
-                    <p className="font-bold text-slate-700">{product.name}</p>
-                    <p className="text-xs text-slate-500 font-normal truncate max-w-[200px]">{product.slug}</p>
+                    <p className="font-bold text-[var(--text-main)]">{product.name}</p>
+                    <p className="text-xs text-[var(--text-muted)] font-normal truncate max-w-[200px]">{product.slug}</p>
                   </td>
-                  <td className="py-4 px-6 text-slate-700 font-medium">{product.category?.name || '-'}</td>
-                  <td className="py-4 px-6 font-black text-slate-700">₹{product.basePrice}</td>
+                  <td className="py-4 px-6 text-[var(--text-main)] font-medium">{product.category?.name || '-'}</td>
+                  <td className="py-4 px-6 font-black text-[var(--text-main)]">₹{product.basePrice}</td>
                   <td className="py-4 px-6">
-                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${product.isActive ? 'neu-flat text-slate-700  ' : 'neu-flat text-slate-500  '}`}>
+                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${product.isActive ? 'neu-flat text-[var(--text-main)]  ' : 'neu-flat text-[var(--text-muted)]  '}`}>
                       {product.isActive ? 'Active' : 'Inactive'}
                     </span>
                   </td>
                   <td className="py-4 px-6 text-right space-x-2 whitespace-nowrap">
-                    <Link href={`/products/edit/${product._id}`} className="inline-flex items-center justify-center p-2 text-slate-600 hover:neu-flat rounded-lg transition-colors  border-transparent hover:">
+                    <Link href={`/products/edit/${product._id}`} className="inline-flex items-center justify-center p-2 text-[var(--text-muted)] hover:neu-flat rounded-lg transition-colors  border-transparent hover:">
                       <Edit className="w-4 h-4" />
                     </Link>
-                    <button onClick={() => handleDelete(product._id)} className="inline-flex items-center justify-center p-2 text-slate-600 hover:neu-flat rounded-lg transition-colors  border-transparent hover:">
+                    <button onClick={() => handleDelete(product._id)} className="inline-flex items-center justify-center p-2 text-[var(--text-muted)] hover:neu-flat rounded-lg transition-colors  border-transparent hover:">
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </td>
@@ -116,7 +116,7 @@ export default function AdminProducts() {
               ))}
               {products.length === 0 && (
                 <tr>
-                  <td colSpan="6" className="p-8 text-center text-slate-500">No products found in the catalogue.</td>
+                  <td colSpan="6" className="p-8 text-center text-[var(--text-muted)]">No products found in the catalogue.</td>
                 </tr>
               )}
             </tbody>

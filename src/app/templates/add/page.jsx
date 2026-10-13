@@ -71,14 +71,14 @@ export default function AddTemplatePage() {
 
   return (
     <div className="p-8 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold text-slate-800 mb-6">Add New Template</h1>
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm space-y-4">
+      <h1 className="text-2xl font-bold text-[var(--text-main)] mb-6">Add New Template</h1>
+      <form onSubmit={handleSubmit} className="bg-[var(--bg-card)] p-6 rounded-lg border border-[var(--border)] shadow-sm space-y-4">
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-1">Name</label>
+          <label className="block text-sm font-semibold text-[var(--text-main)] mb-1">Name</label>
           <input type="text" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-3 py-2 border rounded-md" />
         </div>
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-1">Product</label>
+          <label className="block text-sm font-semibold text-[var(--text-main)] mb-1">Product</label>
           <select required value={formData.product} onChange={e => setFormData({...formData, product: e.target.value})} className="w-full px-3 py-2 border rounded-md">
             <option value="">Select a product...</option>
             {products.map(p => (
@@ -87,19 +87,19 @@ export default function AddTemplatePage() {
           </select>
         </div>
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-1">Thumbnail URL</label>
+          <label className="block text-sm font-semibold text-[var(--text-main)] mb-1">Thumbnail URL</label>
           <input type="text" value={formData.thumbnail} onChange={e => setFormData({...formData, thumbnail: e.target.value})} className="w-full px-3 py-2 border rounded-md" />
         </div>
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-1">Preview Front URL</label>
+          <label className="block text-sm font-semibold text-[var(--text-main)] mb-1">Preview Front URL</label>
           <input type="text" value={formData.previewFront} onChange={e => setFormData({...formData, previewFront: e.target.value})} className="w-full px-3 py-2 border rounded-md" />
         </div>
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-1">Preview Back URL</label>
+          <label className="block text-sm font-semibold text-[var(--text-main)] mb-1">Preview Back URL</label>
           <input type="text" value={formData.previewBack} onChange={e => setFormData({...formData, previewBack: e.target.value})} className="w-full px-3 py-2 border rounded-md" />
         </div>
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-1">Canvas JSON (Fabric v7 format)</label>
+          <label className="block text-sm font-semibold text-[var(--text-main)] mb-1">Canvas JSON (Fabric v7 format)</label>
           <textarea
             rows={5}
             value={formData.canvasJson}
@@ -109,7 +109,7 @@ export default function AddTemplatePage() {
           />
         </div>
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-1">Editable Fields JSON</label>
+          <label className="block text-sm font-semibold text-[var(--text-main)] mb-1">Editable Fields JSON</label>
           <textarea
             rows={4}
             value={formData.editableFields}
@@ -120,10 +120,10 @@ export default function AddTemplatePage() {
         </div>
         <div className="flex items-center gap-2">
           <input type="checkbox" id="isActive" checked={formData.isActive} onChange={e => setFormData({...formData, isActive: e.target.checked})} className="w-4 h-4" />
-          <label htmlFor="isActive" className="text-sm font-semibold text-slate-700">Active</label>
+          <label htmlFor="isActive" className="text-sm font-semibold text-[var(--text-main)]">Active</label>
         </div>
         <div className="pt-4 flex gap-3">
-          <button type="button" onClick={() => router.back()} className="px-4 py-2 border border-slate-300 rounded-md text-slate-600 font-medium">Cancel</button>
+          <button type="button" onClick={() => router.back()} className="px-4 py-2 border border-[var(--border-strong)] rounded-md text-[var(--text-muted)] font-medium">Cancel</button>
           <button type="submit" disabled={loading} className="px-4 py-2 bg-[#0082CA] text-white rounded-md font-medium disabled:opacity-50">
             {loading ? 'Saving...' : 'Save Template'}
           </button>

@@ -25,27 +25,27 @@ export default function AdminLogin() {
       <form onSubmit={onSubmit} className="w-full max-w-sm neu-flat p-8 rounded-2xl    space-y-5">
         <div className="text-center">
           <div className="mx-auto w-12 h-12 rounded-full neu-flat flex items-center justify-center mb-3">
-            <Lock className="w-5 h-5 text-slate-600" />
+            <Lock className="w-5 h-5 text-[var(--text-muted)]" />
           </div>
-          <h1 className="text-xl font-black text-slate-700">Admin Login</h1>
-          <p className="text-sm text-slate-500 mt-1">Maza Printwala control panel</p>
+          <h1 className="text-xl font-black text-[var(--text-main)]">Admin Login</h1>
+          <p className="text-sm text-[var(--text-muted)] mt-1">Maza Printwala control panel</p>
         </div>
 
         {error && <div className="text-sm text-red-600 bg-red-50  border-red-200 rounded-lg p-3">{error}</div>}
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1.5">Email</label>
+          <label className="block text-xs font-bold text-[var(--text-main)] mb-1.5">Email</label>
           <input type="email" required value={email} onChange={e => setEmail(e.target.value)}
-            className="w-full px-4 py-2.5 neu-flat   rounded-xl text-sm outline-none focus:border-slate-500" />
+            className="w-full px-4 py-2.5 neu-flat   rounded-xl text-sm outline-none focus:border-[var(--text-main)]" />
         </div>
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1.5">Password</label>
+          <label className="block text-xs font-bold text-[var(--text-main)] mb-1.5">Password</label>
           <input type="password" required value={password} onChange={e => setPassword(e.target.value)}
-            className="w-full px-4 py-2.5 neu-flat   rounded-xl text-sm outline-none focus:border-slate-500" />
+            className="w-full px-4 py-2.5 neu-flat   rounded-xl text-sm outline-none focus:border-[var(--text-main)]" />
         </div>
 
         <button type="submit" disabled={isLoading}
-          className="w-full py-2.5 bg-slate-800 text-slate-700 rounded-xl font-bold text-sm hover:bg-slate-700 disabled:opacity-70 neu-btn">
+          className="w-full py-2.5 bg-[var(--text-main)] text-[var(--bg-card)] text-[var(--text-main)] rounded-xl font-bold text-sm hover:opacity-90 disabled:opacity-70 neu-btn">
           {isLoading ? 'Signing in…' : 'Sign In'}
         </button>
       </form>

@@ -40,33 +40,33 @@ export default function TemplatesPage() {
     <div className="p-8">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Templates</h1>
-          <p className="text-sm text-slate-500">Manage design templates for products.</p>
+          <h1 className="text-2xl font-bold text-[var(--text-main)]">Templates</h1>
+          <p className="text-sm text-[var(--text-muted)]">Manage design templates for products.</p>
         </div>
         <Link href="/templates/add" className="bg-[#0082CA] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-600 flex items-center gap-2">
           <Plus className="w-4 h-4" /> Add Template
         </Link>
       </div>
 
-      <div className="bg-white rounded-lg border border-slate-200 overflow-hidden shadow-sm">
-        <table className="w-full text-left text-sm text-slate-600">
-          <thead className="bg-slate-50 text-slate-500 text-xs uppercase font-semibold">
+      <div className="bg-[var(--bg-card)] rounded-lg border border-[var(--border)] overflow-hidden shadow-sm">
+        <table className="w-full text-left text-sm text-[var(--text-muted)]">
+          <thead className="bg-[var(--bg-subtle)] text-[var(--text-muted)] text-xs uppercase font-semibold">
             <tr>
-              <th className="px-6 py-4 border-b border-slate-200">Name</th>
-              <th className="px-6 py-4 border-b border-slate-200">Product</th>
-              <th className="px-6 py-4 border-b border-slate-200">Status</th>
-              <th className="px-6 py-4 border-b border-slate-200 text-right">Actions</th>
+              <th className="px-6 py-4 border-b border-[var(--border)]">Name</th>
+              <th className="px-6 py-4 border-b border-[var(--border)]">Product</th>
+              <th className="px-6 py-4 border-b border-[var(--border)]">Status</th>
+              <th className="px-6 py-4 border-b border-[var(--border)] text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-[var(--border)]">
             {loading ? (
-              <tr><td colSpan="4" className="text-center p-6 text-slate-500">Loading...</td></tr>
+              <tr><td colSpan="4" className="text-center p-6 text-[var(--text-muted)]">Loading...</td></tr>
             ) : templates.length === 0 ? (
-              <tr><td colSpan="4" className="text-center p-6 text-slate-500">No templates found</td></tr>
+              <tr><td colSpan="4" className="text-center p-6 text-[var(--text-muted)]">No templates found</td></tr>
             ) : (
               templates.map(template => (
-                <tr key={template._id} className="hover:bg-slate-50">
-                  <td className="px-6 py-4 font-medium text-slate-900">{template.name}</td>
+                <tr key={template._id} className="hover:bg-[var(--bg-subtle)]">
+                  <td className="px-6 py-4 font-medium text-[var(--text-main)]">{template.name}</td>
                   <td className="px-6 py-4">{template.product?.name || 'N/A'}</td>
                   <td className="px-6 py-4">
                     <span className={`px-2 py-1 rounded-full text-xs font-semibold ${template.isActive ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}`}>
