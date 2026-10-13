@@ -24,9 +24,7 @@ export default function AdminLogin() {
     <div className="min-h-screen w-full flex items-center justify-center neu-flat">
       <form onSubmit={onSubmit} className="w-full max-w-sm neu-flat p-8 rounded-2xl    space-y-5">
         <div className="text-center">
-          <div className="mx-auto w-12 h-12 rounded-full neu-flat flex items-center justify-center mb-3">
-            <Lock className="w-5 h-5 text-[var(--text-muted)]" />
-          </div>
+          <img src="/logo-maaza.png" alt="Maaza Printwala" className="h-10 w-auto mx-auto mb-4 object-contain" />
           <h1 className="text-xl font-black text-[var(--text-main)]">Admin Login</h1>
           <p className="text-sm text-[var(--text-muted)] mt-1">Maza Printwala control panel</p>
         </div>

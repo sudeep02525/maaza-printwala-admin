@@ -79,21 +79,26 @@ export default function AdminSidebar() {
       <div className="flex flex-col h-full bg-[var(--sidebar-bg)] text-[var(--text-main)] select-none transition-colors">
         {/* Brand Logo Header */}
         <div className="h-16 flex items-center justify-between px-6 border-b border-[var(--border)] shrink-0">
-          <Link href="/" className="flex items-center gap-3 group overflow-hidden">
-            <div className="w-9 h-9 rounded-xl bg-[var(--text-main)] text-[var(--bg-card)] flex items-center justify-center font-bold text-sm tracking-wider shadow-sm transition-transform group-hover:scale-105 shrink-0">
-              M
-            </div>
-            {!isCompact && (
-              <div className="flex flex-col min-w-0">
-                <span className="font-bold text-[var(--text-main)] tracking-tight text-base leading-tight truncate">
-                  Maaza Printwala
-                </span>
-                <span className="text-[11px] text-[var(--text-muted)] font-medium tracking-wide">
-                  Admin Console
-                </span>
-              </div>
-            )}
-          </Link>
+          {!isCompact ? (
+            <Link href="/" className="flex items-center gap-2 group overflow-hidden">
+              <img
+                src="/logo-maaza.png"
+                alt="Maaza Printwala"
+                className="h-8 w-auto max-w-[145px] object-contain transition-transform group-hover:scale-105"
+              />
+              <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-[var(--bg-subtle)] border border-[var(--border)] text-[var(--text-muted)] shrink-0">
+                Admin
+              </span>
+            </Link>
+          ) : (
+            <Link href="/" className="flex items-center justify-center w-full group overflow-hidden">
+              <img
+                src="/icon.png"
+                alt="Maaza Printwala"
+                className="w-8 h-8 rounded-lg object-contain transition-transform group-hover:scale-105"
+              />
+            </Link>
+          )}
 
           {isMobile && (
             <button

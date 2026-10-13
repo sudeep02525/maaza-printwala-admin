@@ -30,10 +30,8 @@ export default function AdminShell({ children }) {
     return (
       <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[var(--bg-page)] select-none transition-colors">
         <div className="bg-[var(--bg-card)] p-8 rounded-2xl border border-[var(--border)] shadow-sm flex flex-col items-center text-center max-w-sm w-full mx-4 animate-in fade-in duration-200">
-          <div className="w-12 h-12 rounded-xl bg-[var(--text-main)] text-[var(--bg-card)] flex items-center justify-center font-bold text-lg tracking-wider mb-4 shadow-sm">
-            M
-          </div>
-          <h2 className="text-base font-bold text-[var(--text-main)]">Maaza Printwala</h2>
+          <img src="/logo-maaza.png" alt="Maaza Printwala" className="h-10 w-auto mb-3 object-contain" />
+          <h2 className="text-base font-bold text-[var(--text-main)]">Admin Control Panel</h2>
           <p className="text-xs text-[var(--text-muted)] mt-1 mb-6">Checking administrator authorization...</p>
           <div className="w-6 h-6 border-2 border-[var(--border)] border-t-[var(--text-main)] rounded-full animate-spin"></div>
         </div>

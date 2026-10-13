@@ -9,6 +9,10 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 export const metadata = {
   title: 'Maza Printwala — Admin Control Panel',
   description: 'Management console for catalogue, pricing, artwork QC, and orders.',
+  icons: {
+    icon: '/icon.png',
+    apple: '/apple-icon.png',
+  },
 };
 
 export default function RootLayout({ children }) {
