@@ -7,8 +7,11 @@ const axiosInstance = axios.create({
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
+    'X-Client': 'admin',
   },
 });
+
+axiosInstance.defaults.headers.common['X-Client'] = 'admin';
 
 axiosInstance.interceptors.response.use(
   (response) => response.data,
@@ -17,7 +20,14 @@ axiosInstance.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry && originalRequest.url !== '/auth/login') {
       originalRequest._retry = true;
       try {
-        await axios.post(`${API_URL}/auth/refresh`, {}, { withCredentials: true });
+        await axios.post(
+          `${API_URL}/auth/refresh`,
+          {},
+          {
+            withCredentials: true,
+            headers: { 'X-Client': 'admin' },
+          }
+        );
         return axiosInstance(originalRequest);
       } catch (refreshError) {
         if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
