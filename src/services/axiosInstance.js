@@ -36,9 +36,17 @@ axiosInstance.interceptors.response.use(
         return Promise.reject(refreshError);
       }
     }
+    const isClientExpectedError = error.response && (error.response.status >= 400 && error.response.status < 500);
     const message = error.response?.data?.message || error.message || 'Network error occurred';
-    console.error('API Error:', message);
-    return Promise.reject(new Error(message));
+    
+    // Only log unexpected server errors (5xx/network) to console.error to avoid Next.js dev overlay on expected validation/auth errors
+    if (!isClientExpectedError) {
+      console.error('API Error:', message);
+    }
+    
+    const customErr = new Error(message);
+    customErr.response = error.response;
+    return Promise.reject(customErr);
   }
 );
 

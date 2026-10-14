@@ -1,4 +1,5 @@
 import { Inter } from 'next/font/google';
+import { cookies } from 'next/headers';
 import './globals.css';
 import QueryProvider from '../providers/QueryProvider.jsx';
 import AdminShell from '../components/AdminShell.jsx';
@@ -15,17 +16,13 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const cookieStore = await cookies();
+  const theme = cookieStore.get('theme')?.value;
+  const isDark = theme === 'dark';
+
   return (
-    <html lang="en" suppressHydrationWarning className={`${inter.variable}`}>
-      <head>
-        {/* Anti-flash inline script to apply dark class before render */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.theme;var d=t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches);if(d){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}}catch(e){}`,
-          }}
-        />
-      </head>
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${isDark ? 'dark' : ''}`}>
       <body className="text-[var(--text-main)] font-sans antialiased h-screen overflow-hidden flex bg-[var(--bg-page)] transition-colors">
         <QueryProvider>
           <AdminShell>{children}</AdminShell>

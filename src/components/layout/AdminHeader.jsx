@@ -38,10 +38,20 @@ export default function AdminHeader() {
   const [isLoadingNotifs, setIsLoadingNotifs] = useState(false);
   const notifRef = useRef(null);
 
-  // Sync theme state with DOM / localStorage on mount
+  // Sync theme state with DOM / localStorage / cookie on mount
   useEffect(() => {
-    const isCurrentlyDark = document.documentElement.classList.contains('dark');
+    const storedTheme = typeof window !== 'undefined' ? localStorage.getItem('theme') : null;
+    const prefersDark = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isCurrentlyDark = document.documentElement.classList.contains('dark') || storedTheme === 'dark' || (!storedTheme && prefersDark);
+
     setIsDark(isCurrentlyDark);
+    if (isCurrentlyDark) {
+      document.documentElement.classList.add('dark');
+      try { document.cookie = 'theme=dark; path=/; max-age=31536000; SameSite=Lax'; } catch (e) {}
+    } else {
+      document.documentElement.classList.remove('dark');
+      try { document.cookie = 'theme=light; path=/; max-age=31536000; SameSite=Lax'; } catch (e) {}
+    }
   }, []);
 
   const toggleTheme = () => {
@@ -49,10 +59,16 @@ export default function AdminHeader() {
     setIsDark(nextDark);
     if (nextDark) {
       document.documentElement.classList.add('dark');
-      try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+      try { 
+        localStorage.setItem('theme', 'dark'); 
+        document.cookie = 'theme=dark; path=/; max-age=31536000; SameSite=Lax';
+      } catch (e) {}
     } else {
       document.documentElement.classList.remove('dark');
-      try { localStorage.setItem('theme', 'light'); } catch (e) {}
+      try { 
+        localStorage.setItem('theme', 'light'); 
+        document.cookie = 'theme=light; path=/; max-age=31536000; SameSite=Lax';
+      } catch (e) {}
     }
   };
 
