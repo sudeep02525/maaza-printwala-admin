@@ -22,6 +22,10 @@ import {
 import { useAdminAuthStore } from '../../store/adminAuthStore.js';
 import { useAdminUIStore } from '../../store/adminUIStore.js';
 import axiosInstance from '../../services/axiosInstance.js';
+import { io } from 'socket.io-client';
+import { toast } from 'react-hot-toast';
+
+const SOCKET_URL = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api').replace(/\/api\/?$/, '');
 
 export default function AdminHeader() {
   const { user } = useAdminAuthStore();
@@ -72,7 +76,7 @@ export default function AdminHeader() {
     }
   };
 
-  // Fetch notifications
+  // Fetch notifications and periodic safety polling (safety net)
   useEffect(() => {
     let isMounted = true;
     const fetchNotifications = async () => {
@@ -124,7 +128,59 @@ export default function AdminHeader() {
     };
 
     fetchNotifications();
-    return () => { isMounted = false; };
+    // Safety net: poll every 60 seconds in case network drops socket temporarily
+    const interval = setInterval(fetchNotifications, 60000);
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  // Real-time Socket.io listener for new orders
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const socket = io(SOCKET_URL, {
+      withCredentials: true,
+      transports: ['websocket', 'polling'],
+    });
+
+    socket.on('new-order', (order) => {
+      // 1) Prepend to the notifications bell list
+      setNotifications((prev) => [
+        {
+          _id: order._id || `order-${order.orderNumber}-${Date.now()}`,
+          subject: `New order #${order.orderNumber}`,
+          message: `New order #${order.orderNumber} — Rs.${order.amount} (${order.customer || 'Customer'})`,
+          channel: 'IN_APP',
+          read: false,
+          isNew: true,
+          metadata: { orderId: order._id, orderNumber: String(order.orderNumber) },
+          createdAt: order.createdAt || new Date().toISOString(),
+          ...order,
+        },
+        ...prev,
+      ]);
+
+      // 2) Visual toast notification
+      toast.success(`New order #${order.orderNumber} — Rs.${order.amount}`, {
+        duration: 6000,
+      });
+
+      // 3) Audio chime alert
+      try {
+        const audio = new Audio('/notify.mp3');
+        audio.play().catch(() => {});
+      } catch (e) {}
+
+      // 4) Dispatch event for other admin components (e.g., Orders page)
+      window.dispatchEvent(new CustomEvent('admin-new-order', { detail: order }));
+    });
+
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   // Close dropdown on click outside or Escape

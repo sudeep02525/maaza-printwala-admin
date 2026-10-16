@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -97,6 +97,17 @@ export default function AdminDashboardPage() {
     staleTime: 30000,
     retry: 1,
   });
+
+  // Automatically refresh stats on live order arrival
+  useEffect(() => {
+    const handleNewOrder = () => {
+      refetch();
+    };
+    window.addEventListener('admin-new-order', handleNewOrder);
+    return () => {
+      window.removeEventListener('admin-new-order', handleNewOrder);
+    };
+  }, [refetch]);
 
   // Extract authoritative data without any fake mock fallback
   const rawStats = statsResponse?.data?.stats || statsResponse?.stats;

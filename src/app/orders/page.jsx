@@ -25,6 +25,15 @@ export default function AdminOrders() {
 
   useEffect(() => {
     fetchOrders();
+
+    const handleLiveOrder = () => {
+      fetchOrders();
+    };
+
+    window.addEventListener('admin-new-order', handleLiveOrder);
+    return () => {
+      window.removeEventListener('admin-new-order', handleLiveOrder);
+    };
   }, []);
 
   const handleStatusChange = async (id, newStatus) => {
