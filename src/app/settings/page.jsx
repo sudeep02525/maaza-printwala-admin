@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Settings, 
   Store, 
@@ -11,11 +11,15 @@ import {
   CheckCircle2,
   Building,
   Mail,
-  Phone
+  Phone,
+  RefreshCw,
+  ShieldCheck
 } from 'lucide-react';
+import axiosInstance from '@/services/axiosInstance';
 import { toast } from 'react-hot-toast';
 
 export default function AdminSettings() {
+  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [settings, setSettings] = useState({
     storeName: 'Maza Printwala',
@@ -33,13 +37,33 @@ export default function AdminSettings() {
     defaultDpiCheck: 300
   });
 
-  const handleSave = (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    axiosInstance.get('/admin/settings')
+      .then(res => {
+        const s = res?.data?.settings || res?.settings;
+        if (s) {
+          setSettings(prev => ({ ...prev, ...s }));
+        }
+      })
+      .catch(() => {
+        toast.error('Could not load current settings');
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  const handleSave = async (e) => {
+    if (e && e.preventDefault) e.preventDefault();
     setSaving(true);
-    setTimeout(() => {
-      setSaving(false);
+    try {
+      await axiosInstance.put('/admin/settings', settings);
       toast.success('Store settings saved successfully!');
-    }, 600);
+    } catch (err) {
+      toast.error(err?.response?.data?.message || err?.message || 'Could not save settings');
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -58,10 +82,10 @@ export default function AdminSettings() {
 
         <button
           onClick={handleSave}
-          disabled={saving}
-          className="flex items-center gap-2 px-5 py-2.5 bg-[#0082CA] hover:bg-[#006ca8] text-white rounded-xl text-sm font-bold shadow-md transition disabled:opacity-50"
+          disabled={saving || loading}
+          className="flex items-center gap-2 px-5 py-2.5 bg-[#0082CA] hover:bg-[#006ca8] text-white rounded-xl text-sm font-bold shadow-md transition disabled:opacity-50 cursor-pointer"
         >
-          <Save className="w-4 h-4" />
+          {saving ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
           {saving ? 'Saving...' : 'Save Changes'}
         </button>
       </div>
@@ -79,7 +103,7 @@ export default function AdminSettings() {
               <label className="block text-xs font-bold uppercase text-[var(--text-muted)] mb-1">Store Name</label>
               <input
                 type="text"
-                value={settings.storeName}
+                value={settings.storeName || ''}
                 onChange={(e) => setSettings({ ...settings, storeName: e.target.value })}
                 className="w-full px-3.5 py-2.5 bg-[var(--bg-subtle)] border border-[var(--border)] rounded-xl text-sm text-[var(--text-main)] outline-none"
               />
@@ -88,7 +112,7 @@ export default function AdminSettings() {
               <label className="block text-xs font-bold uppercase text-[var(--text-muted)] mb-1">Tagline</label>
               <input
                 type="text"
-                value={settings.tagline}
+                value={settings.tagline || ''}
                 onChange={(e) => setSettings({ ...settings, tagline: e.target.value })}
                 className="w-full px-3.5 py-2.5 bg-[var(--bg-subtle)] border border-[var(--border)] rounded-xl text-sm text-[var(--text-main)] outline-none"
               />
@@ -97,7 +121,7 @@ export default function AdminSettings() {
               <label className="block text-xs font-bold uppercase text-[var(--text-muted)] mb-1">Customer Support Email</label>
               <input
                 type="email"
-                value={settings.supportEmail}
+                value={settings.supportEmail || ''}
                 onChange={(e) => setSettings({ ...settings, supportEmail: e.target.value })}
                 className="w-full px-3.5 py-2.5 bg-[var(--bg-subtle)] border border-[var(--border)] rounded-xl text-sm text-[var(--text-main)] outline-none"
               />
@@ -106,7 +130,7 @@ export default function AdminSettings() {
               <label className="block text-xs font-bold uppercase text-[var(--text-muted)] mb-1">Support Toll-Free Phone</label>
               <input
                 type="text"
-                value={settings.supportPhone}
+                value={settings.supportPhone || ''}
                 onChange={(e) => setSettings({ ...settings, supportPhone: e.target.value })}
                 className="w-full px-3.5 py-2.5 bg-[var(--bg-subtle)] border border-[var(--border)] rounded-xl text-sm text-[var(--text-main)] outline-none"
               />
@@ -121,12 +145,12 @@ export default function AdminSettings() {
             <h2 className="text-base font-bold text-[var(--text-main)]">Taxes & Shipping Rules</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <label className="block text-xs font-bold uppercase text-[var(--text-muted)] mb-1">Standard GST Rate (%)</label>
               <input
                 type="number"
-                value={settings.gstRate}
+                value={settings.gstRate ?? 18}
                 onChange={(e) => setSettings({ ...settings, gstRate: Number(e.target.value) })}
                 className="w-full px-3.5 py-2.5 bg-[var(--bg-subtle)] border border-[var(--border)] rounded-xl text-sm font-bold text-[var(--text-main)] outline-none"
               />
@@ -136,21 +160,31 @@ export default function AdminSettings() {
               <label className="block text-xs font-bold uppercase text-[var(--text-muted)] mb-1">Free Shipping Min. (₹)</label>
               <input
                 type="number"
-                value={settings.freeShippingThreshold}
+                value={settings.freeShippingThreshold ?? 999}
                 onChange={(e) => setSettings({ ...settings, freeShippingThreshold: Number(e.target.value) })}
                 className="w-full px-3.5 py-2.5 bg-[var(--bg-subtle)] border border-[var(--border)] rounded-xl text-sm font-bold text-[var(--text-main)] outline-none"
               />
               <p className="text-[11px] text-[var(--text-faint)] mt-1">Orders above this qualify for free delivery.</p>
             </div>
             <div>
-              <label className="block text-xs font-bold uppercase text-[var(--text-muted)] mb-1">Standard Flat Courier Fee (₹)</label>
+              <label className="block text-xs font-bold uppercase text-[var(--text-muted)] mb-1">Standard Courier Fee (₹)</label>
               <input
                 type="number"
-                value={settings.standardShippingFee}
+                value={settings.standardShippingFee ?? 99}
                 onChange={(e) => setSettings({ ...settings, standardShippingFee: Number(e.target.value) })}
                 className="w-full px-3.5 py-2.5 bg-[var(--bg-subtle)] border border-[var(--border)] rounded-xl text-sm font-bold text-[var(--text-main)] outline-none"
               />
               <p className="text-[11px] text-[var(--text-faint)] mt-1">Charged on sub-threshold orders.</p>
+            </div>
+            <div>
+              <label className="block text-xs font-bold uppercase text-[var(--text-muted)] mb-1">Min Order Value (₹)</label>
+              <input
+                type="number"
+                value={settings.minOrderValue ?? 199}
+                onChange={(e) => setSettings({ ...settings, minOrderValue: Number(e.target.value) })}
+                className="w-full px-3.5 py-2.5 bg-[var(--bg-subtle)] border border-[var(--border)] rounded-xl text-sm font-bold text-[var(--text-main)] outline-none"
+              />
+              <p className="text-[11px] text-[var(--text-faint)] mt-1">Minimum cart subtotal to checkout.</p>
             </div>
           </div>
         </div>
@@ -167,7 +201,7 @@ export default function AdminSettings() {
               <label className="block text-xs font-bold uppercase text-[var(--text-muted)] mb-1">Minimum Artwork Resolution (DPI)</label>
               <input
                 type="number"
-                value={settings.defaultDpiCheck}
+                value={settings.defaultDpiCheck ?? 300}
                 onChange={(e) => setSettings({ ...settings, defaultDpiCheck: Number(e.target.value) })}
                 className="w-full px-3.5 py-2.5 bg-[var(--bg-subtle)] border border-[var(--border)] rounded-xl text-sm font-bold text-[var(--text-main)] outline-none"
               />
@@ -177,12 +211,28 @@ export default function AdminSettings() {
               <label className="block text-xs font-bold uppercase text-[var(--text-muted)] mb-1">Central Print Hub</label>
               <input
                 type="text"
-                value={settings.dispatchCity}
+                value={settings.dispatchCity || ''}
                 onChange={(e) => setSettings({ ...settings, dispatchCity: e.target.value })}
                 className="w-full px-3.5 py-2.5 bg-[var(--bg-subtle)] border border-[var(--border)] rounded-xl text-sm text-[var(--text-main)] outline-none"
               />
               <p className="text-[11px] text-[var(--text-faint)] mt-1">Origin hub used for ETA tracking calculation.</p>
             </div>
+          </div>
+
+          <div className="pt-2 border-t border-[var(--border)] flex items-center justify-between">
+            <div>
+              <span className="text-sm font-bold text-[var(--text-main)] block">Auto-Approve Print Proofs</span>
+              <span className="text-xs text-[var(--text-muted)]">Automatically approve customer uploaded artworks without requiring manual staff review.</span>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input 
+                type="checkbox" 
+                checked={!!settings.autoApproveProof} 
+                onChange={(e) => setSettings({ ...settings, autoApproveProof: e.target.checked })}
+                className="sr-only peer" 
+              />
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#0082CA]"></div>
+            </label>
           </div>
         </div>
       </form>

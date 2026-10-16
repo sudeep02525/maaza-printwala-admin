@@ -33,17 +33,31 @@ export default function AdminLogin() {
 
         <div>
           <label className="block text-xs font-bold text-[var(--text-main)] mb-1.5">Email</label>
-          <input type="email" required value={email} onChange={e => setEmail(e.target.value)}
-            className="w-full px-4 py-2.5 neu-flat   rounded-xl text-sm outline-none focus:border-[var(--text-main)]" />
+          <input
+            type="email"
+            required
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            placeholder="admin@maazaprintwala.in"
+            autoComplete="email"
+            className="w-full px-4 py-2.5 neu-flat rounded-xl text-sm outline-none focus:border-[var(--text-main)]"
+          />
         </div>
         <div>
           <label className="block text-xs font-bold text-[var(--text-main)] mb-1.5">Password</label>
-          <input type="password" required value={password} onChange={e => setPassword(e.target.value)}
-            className="w-full px-4 py-2.5 neu-flat   rounded-xl text-sm outline-none focus:border-[var(--text-main)]" />
+          <input
+            type="password"
+            required
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            placeholder="Enter your password"
+            autoComplete="current-password"
+            className="w-full px-4 py-2.5 neu-flat rounded-xl text-sm outline-none focus:border-[var(--text-main)]"
+          />
         </div>
 
         <button type="submit" disabled={isLoading}
-          className="w-full py-2.5 bg-[var(--text-main)] text-[var(--bg-card)] text-[var(--text-main)] rounded-xl font-bold text-sm hover:opacity-90 disabled:opacity-70 neu-btn">
+          className="w-full py-2.5 bg-[var(--text-main)] text-[var(--bg-card)] rounded-xl font-bold text-sm hover:opacity-90 disabled:opacity-70 neu-btn">
           {isLoading ? 'Signing in…' : 'Sign In'}
         </button>
       </form>
