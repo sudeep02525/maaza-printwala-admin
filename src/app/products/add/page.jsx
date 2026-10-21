@@ -6,6 +6,7 @@ import { ArrowLeft, Save, UploadCloud } from 'lucide-react';
 import axiosInstance from '../../../services/axiosInstance.js';
 import OptionsEditor from '../../../components/OptionsEditor.jsx';
 import PricingEditor from '../../../components/PricingEditor.jsx';
+import { slugify } from '@/lib/devkit';
 
 export default function AdminAddProduct() {
   const router = useRouter();
@@ -50,7 +51,7 @@ export default function AdminAddProduct() {
     setFormData(prev => {
       const updated = { ...prev, [name]: value };
       if (name === 'name' && !prev.slug) {
-        updated.slug = value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+        updated.slug = slugify(value);
       }
       return updated;
     });

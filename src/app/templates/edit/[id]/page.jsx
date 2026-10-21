@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import axiosInstance from '@/services/axiosInstance';
 import { toast } from 'react-hot-toast';
+import { safeJsonParse } from '@/lib/devkit';
 
 export default function EditTemplatePage() {
   const router = useRouter();
@@ -61,23 +62,23 @@ export default function EditTemplatePage() {
       let parsedFields = undefined;
 
       if (formData.canvasJson?.trim()) {
-        try {
-          parsedCanvas = JSON.parse(formData.canvasJson);
-        } catch {
+        const parseResult = safeJsonParse(formData.canvasJson);
+        if (!parseResult.success) {
           toast.error('Invalid Canvas JSON syntax');
           setLoading(false);
           return;
         }
+        parsedCanvas = parseResult.data;
       }
 
       if (formData.editableFields?.trim()) {
-        try {
-          parsedFields = JSON.parse(formData.editableFields);
-        } catch {
+        const parseResult = safeJsonParse(formData.editableFields);
+        if (!parseResult.success) {
           toast.error('Invalid Editable Fields JSON syntax');
           setLoading(false);
           return;
         }
+        parsedFields = parseResult.data;
       }
 
       const payload = {
