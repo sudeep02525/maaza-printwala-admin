@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@codewithraheem/devkit": "^0.1.0",
     "@tanstack/react-query": "^5.101.4",
     "axios": "^1.18.1",
     "clsx": "^2.1.1",
