@@ -277,7 +277,7 @@ export default function AdminDashboardPage() {
           </div>
 
           <a
-            href="http://localhost:3000"
+            href={process.env.NEXT_PUBLIC_STOREFRONT_URL || "http://localhost:3000"}
             target="_blank"
             rel="noopener noreferrer"
             className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-[var(--text-main)] text-[var(--bg-card)] hover:opacity-90 transition-all shadow-xs"
@@ -729,7 +729,7 @@ export default function AdminDashboardPage() {
                   Once customers place orders on your storefront, they will immediately appear here.
                 </p>
                 <a
-                  href="http://localhost:3000"
+                  href={process.env.NEXT_PUBLIC_STOREFRONT_URL || "http://localhost:3000"}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[var(--text-main)] text-[var(--bg-card)] hover:opacity-90 transition-colors"

@@ -39,7 +39,7 @@ const commands = [
   { name: 'CMS & Content', href: '/cms', category: 'Navigation', icon: Layers },
   { name: 'Design Templates', href: '/templates', category: 'Navigation', icon: FileText },
   { name: 'Settings & Config', href: '/settings', category: 'Navigation', icon: Settings },
-  { name: 'Open Live Storefront', href: 'http://localhost:3000', isExternal: true, category: 'Storefront', icon: ExternalLink },
+  { name: 'Open Live Storefront', href: process.env.NEXT_PUBLIC_STOREFRONT_URL || 'http://localhost:3000', isExternal: true, category: 'Storefront', icon: ExternalLink },
 ];
 
 export default function CommandPalette() {

@@ -454,7 +454,7 @@ export default function AdminHeader() {
 
         {/* Primary Wix Pill Button: Open Site */}
         <a
-          href="http://localhost:3000"
+          href={process.env.NEXT_PUBLIC_STOREFRONT_URL || "http://localhost:3000"}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-full text-xs font-semibold bg-[var(--text-main)] text-[var(--bg-card)] hover:opacity-90 transition-all shadow-sm"
