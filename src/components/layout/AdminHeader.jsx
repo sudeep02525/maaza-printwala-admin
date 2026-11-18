@@ -146,17 +146,29 @@ export default function AdminHeader() {
       transports: ['websocket', 'polling'],
     });
 
-    socket.on('new-order', (order) => {
+    const processedOrderKeys = new Set();
+    const handleIncomingOrder = (order) => {
+      if (!order) return;
+      const orderKey = String(order._id || order.orderId || order.orderNumber || '');
+      if (orderKey && processedOrderKeys.has(orderKey)) return;
+      if (orderKey) {
+        processedOrderKeys.add(orderKey);
+        setTimeout(() => processedOrderKeys.delete(orderKey), 10000);
+      }
+
+      const orderAmount = order.amount ?? order.totalAmount ?? 0;
+      const customerName = order.customer || order.customerName || 'Customer';
+
       // 1) Prepend to the notifications bell list
       setNotifications((prev) => [
         {
           _id: order._id || `order-${order.orderNumber}-${Date.now()}`,
           subject: `New order #${order.orderNumber}`,
-          message: `New order #${order.orderNumber} — Rs.${order.amount} (${order.customer || 'Customer'})`,
+          message: `New order #${order.orderNumber} — Rs.${orderAmount} (${customerName})`,
           channel: 'IN_APP',
           read: false,
           isNew: true,
-          metadata: { orderId: order._id, orderNumber: String(order.orderNumber) },
+          metadata: { orderId: order._id || order.orderId, orderNumber: String(order.orderNumber) },
           createdAt: order.createdAt || new Date().toISOString(),
           ...order,
         },
@@ -164,7 +176,7 @@ export default function AdminHeader() {
       ]);
 
       // 2) Visual toast notification
-      toast.success(`New order #${order.orderNumber} — Rs.${order.amount}`, {
+      toast.success(`New order #${order.orderNumber} — Rs.${orderAmount}`, {
         duration: 6000,
       });
 
@@ -176,7 +188,10 @@ export default function AdminHeader() {
 
       // 4) Dispatch event for other admin components (e.g., Orders page)
       window.dispatchEvent(new CustomEvent('admin-new-order', { detail: order }));
-    });
+    };
+
+    socket.on('new-order', handleIncomingOrder);
+    socket.on('new_order', handleIncomingOrder);
 
     return () => {
       socket.disconnect();
