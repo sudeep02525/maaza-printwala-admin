@@ -24,7 +24,7 @@ export default function AdminSettings() {
   const [settings, setSettings] = useState({
     storeName: 'Maza Printwala',
     tagline: 'Enterprise Commercial Printing & Merchandising',
-    supportEmail: 'support@maazaprintwala.in',
+    supportEmail: 'support@mazaprintwala.com',
     supportPhone: '1800-PRINT-NOW',
     dispatchCity: 'Mumbai, Maharashtra',
     gstRate: 18,

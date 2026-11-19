@@ -183,7 +183,7 @@ export default function AdminSidebar() {
                     {user?.name || 'Administrator'}
                   </p>
                   <p className="text-[11px] text-[var(--text-muted)] truncate">
-                    {user?.email || 'admin@maazaprintwala.in'}
+                    {user?.email || 'admin@mazaprintwala.com'}
                   </p>
                 </div>
               )}

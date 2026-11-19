@@ -38,7 +38,7 @@ export default function AdminLogin() {
             required
             value={email}
             onChange={e => setEmail(e.target.value)}
-            placeholder="admin@maazaprintwala.in"
+            placeholder="admin@mazaprintwala.com"
             autoComplete="email"
             className="w-full px-4 py-2.5 neu-flat rounded-xl text-sm outline-none focus:border-[var(--text-main)]"
           />
