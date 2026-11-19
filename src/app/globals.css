@@ -1,6 +1,15 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* ============================================================
+   TYPOGRAPHY TOKEN  (Tailwind v4)
+   Manrope, injected as --font-manrope by next/font in layout.jsx
+   ============================================================ */
+@theme {
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+
 :root {
   --bg-page: #F5F7F9;
   --bg-card: #FFFFFF;
@@ -82,7 +91,7 @@
   body {
     background-color: var(--bg-page);
     color: var(--text-main);
-    font-family: var(--font-sans), Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: var(--font-manrope), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
     transition: background-color 0.2s ease, color 0.2s ease;

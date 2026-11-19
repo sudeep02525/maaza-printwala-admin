@@ -1,11 +1,9 @@
-import { Inter } from 'next/font/google';
+import { fontAdmin } from './fonts.js';
 import { cookies } from 'next/headers';
 import './globals.css';
 import QueryProvider from '../providers/QueryProvider.jsx';
 import AdminShell from '../components/AdminShell.jsx';
 import { Toaster } from 'react-hot-toast';
-
-const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
 export const metadata = {
   title: 'Maza Printwala — Admin Control Panel',
@@ -22,7 +20,7 @@ export default async function RootLayout({ children }) {
   const isDark = theme === 'dark';
 
   return (
-    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${isDark ? 'dark' : ''}`}>
+    <html lang="en" suppressHydrationWarning className={`${fontAdmin.variable} ${isDark ? 'dark' : ''}`}>
       <body className="text-[var(--text-main)] font-sans antialiased h-screen overflow-hidden flex bg-[var(--bg-page)] transition-colors">
         <QueryProvider>
           <AdminShell>{children}</AdminShell>
