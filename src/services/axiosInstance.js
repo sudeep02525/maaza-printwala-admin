@@ -14,21 +14,36 @@ const axiosInstance = axios.create({
 
 axiosInstance.defaults.headers.common['X-Client'] = 'admin';
 
+let refreshPromise = null;
+
 axiosInstance.interceptors.response.use(
   (response) => response.data,
   async (error) => {
     const originalRequest = error.config;
-    if (error.response?.status === 401 && !originalRequest._retry && originalRequest.url !== '/auth/login') {
+    if (
+      error.response?.status === 401 &&
+      originalRequest &&
+      !originalRequest._retry &&
+      !originalRequest.url?.includes('/auth/login') &&
+      !originalRequest.url?.includes('/auth/refresh')
+    ) {
       originalRequest._retry = true;
       try {
-        await axios.post(
-          `${API_URL}/auth/refresh`,
-          {},
-          {
-            withCredentials: true,
-            headers: { 'X-Client': 'admin' },
-          }
-        );
+        if (!refreshPromise) {
+          refreshPromise = axios
+            .post(
+              `${API_URL}/auth/refresh`,
+              {},
+              {
+                withCredentials: true,
+                headers: { 'X-Client': 'admin' },
+              }
+            )
+            .finally(() => {
+              refreshPromise = null;
+            });
+        }
+        await refreshPromise;
         return axiosInstance(originalRequest);
       } catch (refreshError) {
         if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
