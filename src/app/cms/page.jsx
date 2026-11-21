@@ -83,21 +83,24 @@ export default function CMSPage() {
         <div className="w-full md:w-64  md:border-b-0 md:  neu-flat p-4 space-y-2">
           <button 
             onClick={() => setActiveTab('hero')} 
-            className={`w-full text-left px-4 py-3 rounded-xl font-bold text-sm transition-colors ${activeTab === 'hero' ? 'neu-flat    text-[#0082CA]' : 'text-[var(--text-muted)] hover:neu-flat/50  border-transparent'}`}
+            className={`w-full text-left px-4 py-3 rounded-xl font-bold text-sm transition-colors flex items-center justify-between ${activeTab === 'hero' ? 'neu-flat text-[#0082CA]' : 'text-[var(--text-muted)] hover:neu-flat/50 border-transparent'}`}
           >
-            Hero Slider
+            <span>Hero Slider</span>
+            <span className="text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded-full">Live</span>
           </button>
           <button 
             onClick={() => setActiveTab('banners')} 
-            className={`w-full text-left px-4 py-3 rounded-xl font-bold text-sm transition-colors ${activeTab === 'banners' ? 'neu-flat    text-[#0082CA]' : 'text-[var(--text-muted)] hover:neu-flat/50  border-transparent'}`}
+            className={`w-full text-left px-4 py-3 rounded-xl font-bold text-sm transition-colors flex items-center justify-between ${activeTab === 'banners' ? 'neu-flat text-[#0082CA]' : 'text-[var(--text-muted)] hover:neu-flat/50 border-transparent'}`}
           >
-            Promotional Banners
+            <span>Promotional Banners</span>
+            <span className="text-[10px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 px-2 py-0.5 rounded-full">Coming Soon</span>
           </button>
           <button 
             onClick={() => setActiveTab('footer')} 
-            className={`w-full text-left px-4 py-3 rounded-xl font-bold text-sm transition-colors ${activeTab === 'footer' ? 'neu-flat    text-[#0082CA]' : 'text-[var(--text-muted)] hover:neu-flat/50  border-transparent'}`}
+            className={`w-full text-left px-4 py-3 rounded-xl font-bold text-sm transition-colors flex items-center justify-between ${activeTab === 'footer' ? 'neu-flat text-[#0082CA]' : 'text-[var(--text-muted)] hover:neu-flat/50 border-transparent'}`}
           >
-            Footer Links & Policies
+            <span>Footer Links & Policies</span>
+            <span className="text-[10px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 px-2 py-0.5 rounded-full">Coming Soon</span>
           </button>
         </div>
 
