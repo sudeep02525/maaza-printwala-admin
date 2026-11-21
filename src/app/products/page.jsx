@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Plus, Edit, Trash2, Image as ImageIcon } from 'lucide-react';
 import axiosInstance from '../../services/axiosInstance.js';
+import { getImageUrl } from '@/utils/getImageUrl.js';
 
 export default function AdminProducts() {
   const [products, setProducts] = useState([]);
@@ -82,7 +83,7 @@ export default function AdminProducts() {
                   <td className="py-4 px-6">
                     {product.images && product.images[0] ? (
                       <img 
-                        src={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}${product.images[0]}`} 
+                        src={getImageUrl(product.images[0])} 
                         alt={product.name} 
                         className="w-12 h-12 object-cover rounded-xl  "
                         onError={(e) => { e.target.src = '/placeholder.png' }}
