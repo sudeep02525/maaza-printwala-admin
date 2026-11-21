@@ -5,6 +5,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Edit2, Trash2, Search, Image as ImageIcon } from 'lucide-react';
 import axiosInstance from '../../services/axiosInstance.js';
 import Link from 'next/link';
+import { getImageUrl } from '@/utils/getImageUrl.js';
 
 export default function CategoriesPage() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -89,7 +90,7 @@ export default function CategoriesPage() {
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-lg neu-flat flex items-center justify-center   shrink-0">
                           {cat.image ? (
-                            <img src={cat.image} alt={cat.name} className="w-full h-full object-cover rounded-lg" />
+                            <img src={getImageUrl(cat.image)} alt={cat.name} className="w-full h-full object-cover rounded-lg" />
                           ) : (
                             <ImageIcon className="w-4 h-4 text-[var(--text-faint)]" />
                           )}

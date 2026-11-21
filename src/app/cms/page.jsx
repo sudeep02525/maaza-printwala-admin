@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Save, Plus, Trash2, GripVertical, Image as ImageIcon } from 'lucide-react';
 import axiosInstance from '../../services/axiosInstance.js';
+import { getImageUrl } from '@/utils/getImageUrl.js';
 
 export default function CMSPage() {
   const queryClient = useQueryClient();
@@ -127,7 +128,7 @@ export default function CMSPage() {
                       <div className="flex gap-4">
                         <div className="w-32 h-24 neu-flat rounded-lg   flex items-center justify-center overflow-hidden shrink-0 relative">
                           {slide.image ? (
-                            <img src={slide.image} className="w-full h-full object-cover" alt="slide" />
+                            <img src={getImageUrl(slide.image)} className="w-full h-full object-cover" alt="slide" />
                           ) : (
                             <ImageIcon className="w-6 h-6 text-[var(--text-faint)]" />
                           )}
