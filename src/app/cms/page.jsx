@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Save,
@@ -23,6 +23,9 @@ import {
   CreditCard,
   ChevronUp,
   ChevronDown,
+  Upload,
+  LayoutGrid,
+  Type,
 } from 'lucide-react';
 import axiosInstance from '../../services/axiosInstance.js';
 import { getImageUrl } from '@/utils/getImageUrl.js';
@@ -164,6 +167,51 @@ const DEFAULT_POLICIES = {
   },
 };
 
+const DEFAULT_CATEGORY_BLOCKS = [
+  {
+    title: 'Business Essentials',
+    tiles: [
+      { name: 'Visiting Cards', img: 'https://res.cloudinary.com/kz2pddnr/image/upload/v1795262678/maaza-printwala/images/cat_visiting_cards_new_1785478123231.jpg', link: '/visiting-cards', isActive: true },
+      { name: 'Notebooks', img: 'https://res.cloudinary.com/kz2pddnr/image/upload/v1795262673/maaza-printwala/images/cat_notebooks_new_1785478132458.jpg', link: '/stationery?sub=notebooks', isActive: true },
+      { name: 'Custom Mugs', img: 'https://res.cloudinary.com/kz2pddnr/image/upload/v1795262674/maaza-printwala/images/cat_mugs_new_1785478141544.jpg', link: '/products?search=mug', isActive: true },
+      { name: 'Custom Clothing, Bags & Caps', img: 'https://res.cloudinary.com/kz2pddnr/image/upload/v1795262671/maaza-printwala/images/cat_clothing_new_1785478162007.jpg', link: '/products?search=apparel', isActive: true },
+    ],
+  },
+  {
+    title: 'Custom Apparel',
+    tiles: [
+      { name: 'Custom Polo T-shirts', img: 'https://res.cloudinary.com/kz2pddnr/image/upload/v1795262676/maaza-printwala/images/cat_polo_new_1785478171451.jpg', link: '/products?search=polo', isActive: true },
+      { name: 'Custom T-shirts', img: 'https://res.cloudinary.com/kz2pddnr/image/upload/v1795262677/maaza-printwala/images/cat_tshirt_new_1785478181285.jpg', link: '/products?search=t-shirt', isActive: true },
+      { name: 'Custom Formal Shirts', img: 'https://res.cloudinary.com/kz2pddnr/image/upload/v1795262668/maaza-printwala/images/cat_formal_new_1785478190948.jpg', link: '/products?search=apparel', isActive: true },
+      { name: 'Caps', img: 'https://res.cloudinary.com/kz2pddnr/image/upload/v1795262663/maaza-printwala/images/cat_caps_new_1785478209032.jpg', link: '/products?search=cap', isActive: true },
+    ],
+  },
+];
+
+const DEFAULT_HOME_HEADINGS = {
+  bestSellersTitle: 'Best Selling Products',
+  bestSellersSubtitle: 'Most ordered commercial print and merchandise products',
+  newArrivalsTitle: 'New Arrivals & Fresh Templates',
+  newArrivalsSubtitle: 'Fresh new templates and products',
+  corporateTitle: 'Corporate Essentials & Gifting',
+  corporateSubtitle: 'Bulk corporate solutions with custom GST invoicing',
+  trendingTitle: 'Trending Print Catalogue',
+  trendingSubtitle: 'Top rated commercial solutions popular this month',
+  popularSearchesTitle: 'Popular Searches',
+};
+
+const DEFAULT_PAYMENTS = {
+  enabled: true,
+  badges: [
+    { id: 'visa', label: 'VISA', enabled: true },
+    { id: 'mc', label: 'Mastercard', enabled: true },
+    { id: 'upi', label: 'UPI', enabled: true },
+    { id: 'rupay', label: 'RuPay', enabled: true },
+    { id: 'netbanking', label: 'Net Banking', enabled: false },
+    { id: 'cod', label: 'Cash on Delivery', enabled: false },
+  ],
+};
+
 const Field = ({ label, value, onChange, placeholder, type = 'text', help }) => (
   <div>
     <label className="block text-xs font-bold text-[var(--text-main)] mb-1.5">{label}</label>
@@ -192,6 +240,78 @@ const TextAreaField = ({ label, value, onChange, placeholder, rows = 4, help }) 
   </div>
 );
 
+// One-Click Image Upload Field with Direct Cloudinary Integration
+const ImageField = ({ label, value, onChange, placeholder, help }) => {
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef(null);
+
+  const handleUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append('image', file);
+    formData.append('folder', 'maaza-printwala/cms');
+    setIsUploading(true);
+    try {
+      const res = await axiosInstance.post('/upload/image', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      const uploadedUrl = res.data?.url || res.url || res.data?.data?.url;
+      if (uploadedUrl) {
+        onChange(uploadedUrl);
+      }
+    } catch (err) {
+      alert('Failed to upload image. Please try again.');
+      console.error(err);
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
+  return (
+    <div>
+      <label className="block text-xs font-bold text-[var(--text-main)] mb-1.5">{label}</label>
+      <div className="flex items-center gap-2">
+        <input
+          type="text"
+          value={value || ''}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder || 'https://res.cloudinary.com/... or click Upload'}
+          className="flex-1 px-3 py-2 neu-flat rounded-lg focus:ring-2 focus:ring-[var(--border-strong)] focus:border-[var(--text-main)] outline-none text-sm text-[var(--text-main)] bg-[var(--bg-card)]"
+        />
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleUpload}
+        />
+        <button
+          type="button"
+          disabled={isUploading}
+          onClick={() => fileInputRef.current?.click()}
+          className="px-3.5 py-2 neu-flat rounded-lg font-bold text-xs flex items-center gap-1.5 text-[#0082CA] hover:brightness-105 transition-all disabled:opacity-50 cursor-pointer shrink-0"
+        >
+          <Upload className="w-3.5 h-3.5" />
+          <span>{isUploading ? 'Uploading...' : 'Upload'}</span>
+        </button>
+      </div>
+      {value && (
+        <div className="mt-2 flex items-center gap-2">
+          <img
+            src={getImageUrl(value)}
+            alt="Preview"
+            className="w-12 h-12 object-cover rounded-md border border-[var(--border)] shadow-xs"
+          />
+          <span className="text-[11px] text-[var(--text-muted)] truncate max-w-xs">{value}</span>
+        </div>
+      )}
+      {help && <p className="text-[11px] text-[var(--text-muted)] mt-1">{help}</p>}
+    </div>
+  );
+};
+
 const ICON_OPTIONS = [
   'ShieldCheck',
   'Truck',
@@ -211,11 +331,14 @@ export default function CMSPage() {
   // CMS States
   const [heroSlides, setHeroSlides] = useState([]);
   const [banners, setBanners] = useState([]);
+  const [categoryBlocks, setCategoryBlocks] = useState(DEFAULT_CATEGORY_BLOCKS);
+  const [homeHeadings, setHomeHeadings] = useState(DEFAULT_HOME_HEADINGS);
   const [offerStrip, setOfferStrip] = useState(DEFAULT_OFFER_STRIP);
   const [trustItems, setTrustItems] = useState(DEFAULT_TRUST_ITEMS);
   const [faqs, setFaqs] = useState(DEFAULT_FAQS);
   const [contactInfo, setContactInfo] = useState(DEFAULT_CONTACT);
   const [footer, setFooter] = useState(DEFAULT_FOOTER);
+  const [payments, setPayments] = useState(DEFAULT_PAYMENTS);
   const [policies, setPolicies] = useState(DEFAULT_POLICIES);
   const [activePolicyKey, setActivePolicyKey] = useState('privacy');
 
@@ -241,37 +364,54 @@ export default function CMSPage() {
       setBanners(bannersContent.content.banners);
     }
 
-    // 3. Offer Strip
+    // 3. Category Tiles
+    const catContent = content.find((c) => c.key === 'homepage_categories');
+    if (catContent?.content?.blocks?.length) {
+      setCategoryBlocks(catContent.content.blocks);
+    }
+
+    // 4. Section Headings
+    const headingsContent = content.find((c) => c.key === 'homepage_headings');
+    if (headingsContent?.content) {
+      setHomeHeadings({ ...DEFAULT_HOME_HEADINGS, ...headingsContent.content });
+    }
+
+    // 5. Offer Strip
     const offerContent = content.find((c) => c.key === 'offer_strip');
     if (offerContent?.content) {
       setOfferStrip({ ...DEFAULT_OFFER_STRIP, ...offerContent.content, isActive: offerContent.isActive ?? offerContent.content.isActive });
     }
 
-    // 4. Trust Strip
+    // 6. Trust Strip
     const trustContent = content.find((c) => c.key === 'homepage_trust');
     if (trustContent?.content?.items?.length) {
       setTrustItems(trustContent.content.items);
     }
 
-    // 5. FAQ
+    // 7. FAQ
     const faqContent = content.find((c) => c.key === 'homepage_faq');
     if (faqContent?.content?.items?.length) {
       setFaqs(faqContent.content.items);
     }
 
-    // 6. Contact Info
+    // 8. Contact Info
     const contactContent = content.find((c) => c.key === 'contact_info');
     if (contactContent?.content) {
       setContactInfo({ ...DEFAULT_CONTACT, ...contactContent.content });
     }
 
-    // 7. Footer Links
+    // 9. Footer Links & Payments
     const footerContent = content.find((c) => c.key === 'footer_links');
     if (footerContent?.content) {
       setFooter({ ...DEFAULT_FOOTER, ...footerContent.content });
     }
 
-    // 8. Policies
+    const paymentContent = content.find((c) => c.key === 'payment_strip');
+    if (paymentContent?.content) {
+      setPayments({ ...DEFAULT_PAYMENTS, ...paymentContent.content });
+    }
+
+    // 10. Policies
     const privacyContent = content.find((c) => c.key === 'policy_privacy');
     const termsContent = content.find((c) => c.key === 'policy_terms');
     const shippingContent = content.find((c) => c.key === 'policy_shipping');
@@ -315,6 +455,26 @@ export default function CMSPage() {
       sortOrder: 2,
     });
 
+  const saveCategoryTiles = () =>
+    saveMutation.mutate({
+      key: 'homepage_categories',
+      section: 'BANNERS',
+      title: 'Category Tiles',
+      content: { blocks: categoryBlocks },
+      isActive: true,
+      sortOrder: 3,
+    });
+
+  const saveHeadings = () =>
+    saveMutation.mutate({
+      key: 'homepage_headings',
+      section: 'HERO',
+      title: 'Home Section Headings',
+      content: homeHeadings,
+      isActive: true,
+      sortOrder: 4,
+    });
+
   const saveOfferStrip = () =>
     saveMutation.mutate({
       key: 'offer_strip',
@@ -332,7 +492,7 @@ export default function CMSPage() {
       title: 'Homepage Trust Strip',
       content: { items: trustItems },
       isActive: true,
-      sortOrder: 3,
+      sortOrder: 5,
     });
 
   const saveFaqs = () =>
@@ -342,7 +502,7 @@ export default function CMSPage() {
       title: 'Frequently Asked Questions',
       content: { items: faqs },
       isActive: true,
-      sortOrder: 4,
+      sortOrder: 6,
     });
 
   const saveContactInfo = () =>
@@ -352,18 +512,27 @@ export default function CMSPage() {
       title: 'Store Contact Information',
       content: contactInfo,
       isActive: true,
-      sortOrder: 5,
+      sortOrder: 7,
     });
 
-  const saveFooter = () =>
+  const saveFooter = () => {
     saveMutation.mutate({
       key: 'footer_links',
       section: 'FOOTER',
-      title: 'Footer Links & Policies',
+      title: 'Footer Links',
       content: footer,
       isActive: true,
-      sortOrder: 6,
+      sortOrder: 8,
     });
+    saveMutation.mutate({
+      key: 'payment_strip',
+      section: 'FOOTER',
+      title: 'Payment Strip Badges',
+      content: payments,
+      isActive: true,
+      sortOrder: 9,
+    });
+  };
 
   const savePolicy = (policyKey) => {
     const keyMap = {
@@ -379,7 +548,7 @@ export default function CMSPage() {
       title: meta.title,
       content: policies[policyKey],
       isActive: true,
-      sortOrder: 7,
+      sortOrder: 10,
     });
   };
 
@@ -400,7 +569,53 @@ export default function CMSPage() {
   const addBanner = () => setBanners([...banners, { ...EMPTY_BANNER }]);
   const removeBanner = (index) => setBanners(banners.filter((_, i) => i !== index));
 
-  // FAQ helpers
+  // Category Blocks Helpers
+  const updateBlockTitle = (bi, title) => {
+    const next = [...categoryBlocks];
+    next[bi] = { ...next[bi], title };
+    setCategoryBlocks(next);
+  };
+  const addBlock = () => {
+    setCategoryBlocks([...categoryBlocks, { title: 'New Category Block', tiles: [] }]);
+  };
+  const removeBlock = (bi) => {
+    setCategoryBlocks(categoryBlocks.filter((_, i) => i !== bi));
+  };
+  const updateTile = (bi, ti, field, value) => {
+    const next = [...categoryBlocks];
+    const tiles = [...next[bi].tiles];
+    tiles[ti] = { ...tiles[ti], [field]: value };
+    next[bi] = { ...next[bi], tiles };
+    setCategoryBlocks(next);
+  };
+  const addTile = (bi) => {
+    const next = [...categoryBlocks];
+    next[bi] = {
+      ...next[bi],
+      tiles: [...next[bi].tiles, { name: 'New Category', img: '', link: '/products', isActive: true }],
+    };
+    setCategoryBlocks(next);
+  };
+  const removeTile = (bi, ti) => {
+    const next = [...categoryBlocks];
+    next[bi] = {
+      ...next[bi],
+      tiles: next[bi].tiles.filter((_, i) => i !== ti),
+    };
+    setCategoryBlocks(next);
+  };
+
+  // Trust Strip Helpers
+  const updateTrust = (index, field, value) => {
+    const next = [...trustItems];
+    next[index] = { ...next[index], [field]: value };
+    setTrustItems(next);
+  };
+  const addTrust = () =>
+    setTrustItems([...trustItems, { icon: 'ShieldCheck', title: 'New Trust Item', description: '', isActive: true }]);
+  const removeTrust = (index) => setTrustItems(trustItems.filter((_, i) => i !== index));
+
+  // FAQ Helpers
   const updateFaq = (index, field, value) => {
     const next = [...faqs];
     next[index] = { ...next[index], [field]: value };
@@ -409,27 +624,26 @@ export default function CMSPage() {
   const addFaq = () => setFaqs([...faqs, { question: '', answer: '', isActive: true }]);
   const removeFaq = (index) => setFaqs(faqs.filter((_, i) => i !== index));
   const moveFaq = (index, dir) => {
-    if ((dir === -1 && index === 0) || (dir === 1 && index === faqs.length - 1)) return;
-    const next = [...faqs];
     const target = index + dir;
-    [next[index], next[target]] = [next[target], next[index]];
+    if (target < 0 || target >= faqs.length) return;
+    const next = [...faqs];
+    const temp = next[index];
+    next[index] = next[target];
+    next[target] = temp;
     setFaqs(next);
   };
 
-  // Trust helpers
-  const updateTrustItem = (index, field, value) => {
-    const next = [...trustItems];
-    next[index] = { ...next[index], [field]: value };
-    setTrustItems(next);
-  };
-  const addTrustItem = () =>
-    setTrustItems([...trustItems, { icon: 'CheckCircle', title: '', description: '', isActive: true }]);
-  const removeTrustItem = (index) => setTrustItems(trustItems.filter((_, i) => i !== index));
-
-  // Footer helpers
+  // Footer & Payment Helpers
   const setFooterField = (field, value) => setFooter({ ...footer, [field]: value });
   const setSocial = (network, value) =>
     setFooter({ ...footer, social: { ...(footer.social || {}), [network]: value } });
+
+  const togglePaymentBadge = (id) => {
+    const nextBadges = (payments.badges || []).map((b) =>
+      b.id === id ? { ...b, enabled: !b.enabled } : b
+    );
+    setPayments({ ...payments, badges: nextBadges });
+  };
 
   const updateColumn = (ci, field, value) => {
     const next = [...footer.columns];
@@ -507,6 +721,14 @@ export default function CMSPage() {
             <span>Announcement Strip</span>
             <LivePill />
           </button>
+          <button onClick={() => setActiveTab('categories')} className={tabClass('categories')}>
+            <span>Category Tiles</span>
+            <LivePill />
+          </button>
+          <button onClick={() => setActiveTab('headings')} className={tabClass('headings')}>
+            <span>Section Headings</span>
+            <LivePill />
+          </button>
           <button onClick={() => setActiveTab('trust')} className={tabClass('trust')}>
             <span>Trust Strip</span>
             <LivePill />
@@ -520,7 +742,7 @@ export default function CMSPage() {
             <LivePill />
           </button>
           <button onClick={() => setActiveTab('footer')} className={tabClass('footer')}>
-            <span>Footer Links</span>
+            <span>Footer & Payments</span>
             <LivePill />
           </button>
           <button onClick={() => setActiveTab('policies')} className={tabClass('policies')}>
@@ -542,7 +764,7 @@ export default function CMSPage() {
                 <div>
                   <h2 className="text-lg font-bold text-[var(--text-main)]">Hero Slider</h2>
                   <p className="text-xs text-[var(--text-muted)] mt-0.5">
-                    The first slide with both an image and a title replaces the default homepage banner.
+                    The first slide with both an image and a title replaces the default homepage banner. Use the Upload button to select an image from your device.
                   </p>
                 </div>
                 <button
@@ -569,12 +791,12 @@ export default function CMSPage() {
                           )}
                         </div>
                         <div className="flex-1">
-                          <Field
-                            label="Image URL"
+                          <ImageField
+                            label="Slide Image"
                             value={slide.image}
                             onChange={(v) => updateSlide(index, 'image', v)}
-                            placeholder="https://res.cloudinary.com/..."
-                            help="Cloudinary direct image URL"
+                            placeholder="https://res.cloudinary.com/... or click Upload"
+                            help="Cloudinary direct image URL or upload image directly"
                           />
                         </div>
                       </div>
@@ -640,11 +862,11 @@ export default function CMSPage() {
                             )}
                           </div>
                           <div className="flex-1">
-                            <Field
-                              label="Image URL"
+                            <ImageField
+                              label="Banner Image"
                               value={banner.image}
                               onChange={(v) => updateBanner(index, 'image', v)}
-                              placeholder="https://res.cloudinary.com/..."
+                              placeholder="https://res.cloudinary.com/... or click Upload"
                             />
                           </div>
                         </div>
@@ -672,38 +894,35 @@ export default function CMSPage() {
               <SaveButton onClick={saveBanners} label="Save Promotional Banners" />
             </div>
           ) : activeTab === 'offer' ? (
-            /* TAB 3: OFFER STRIP / ANNOUNCEMENT BAR */
+            /* TAB 3: ANNOUNCEMENT / OFFER STRIP */
             <div className="space-y-6 max-w-3xl">
               <div>
                 <h2 className="text-lg font-bold text-[var(--text-main)]">Announcement / Offer Strip</h2>
                 <p className="text-xs text-[var(--text-muted)] mt-0.5">
-                  Displays a top notification bar across the storefront header. Perfect for flash sales and festival notices.
+                  Appears at the very top of the storefront above the main header. Dismissible per browser session.
                 </p>
               </div>
 
               <div className="neu-flat rounded-xl p-6 space-y-5">
                 <div className="flex items-center justify-between pb-4 border-b border-[var(--border)]">
                   <div>
-                    <span className="text-sm font-bold text-[var(--text-main)]">Enable Announcement Bar</span>
-                    <p className="text-xs text-[var(--text-muted)]">Turn on to display on the storefront header</p>
+                    <label className="text-sm font-bold text-[var(--text-main)] block">Strip Visibility</label>
+                    <p className="text-xs text-[var(--text-muted)]">Toggle this to show or hide the announcement bar across the site.</p>
                   </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={Boolean(offerStrip.isActive)}
-                      onChange={(e) => setOfferStrip({ ...offerStrip, isActive: e.target.checked })}
-                      className="sr-only peer"
-                    />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0082CA]"></div>
-                  </label>
+                  <input
+                    type="checkbox"
+                    checked={Boolean(offerStrip.isActive)}
+                    onChange={(e) => setOfferStrip({ ...offerStrip, isActive: e.target.checked })}
+                    className="w-5 h-5 accent-[#0082CA] rounded cursor-pointer"
+                  />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Field
                     label="Badge Text"
                     value={offerStrip.badge}
                     onChange={(v) => setOfferStrip({ ...offerStrip, badge: v })}
-                    placeholder="e.g. FESTIVAL OFFER"
+                    placeholder="e.g. SPECIAL OFFER, FLASH SALE"
                   />
                   <div>
                     <label className="block text-xs font-bold text-[var(--text-main)] mb-1.5">Color Theme</label>
@@ -712,10 +931,11 @@ export default function CMSPage() {
                       onChange={(e) => setOfferStrip({ ...offerStrip, bgStyle: e.target.value })}
                       className="w-full px-3 py-2 neu-flat rounded-lg focus:ring-2 focus:ring-[var(--border-strong)] focus:border-[var(--text-main)] outline-none text-sm text-[var(--text-main)] bg-[var(--bg-card)]"
                     >
-                      <option value="blue">Electric Blue (Brand Default)</option>
-                      <option value="dark">Sleek Charcoal Dark</option>
-                      <option value="amber">Warm Amber / Gold</option>
-                      <option value="gradient">Festive Gradient</option>
+                      <option value="blue">Blue / Brand Primary</option>
+                      <option value="dark">Midnight Dark (Slate 900)</option>
+                      <option value="amber">Warm Amber Gold</option>
+                      <option value="emerald">Emerald Green</option>
+                      <option value="crimson">Crimson Red</option>
                     </select>
                   </div>
                 </div>
@@ -724,89 +944,303 @@ export default function CMSPage() {
                   label="Announcement Message"
                   value={offerStrip.text}
                   onChange={(v) => setOfferStrip({ ...offerStrip, text: v })}
-                  placeholder="e.g. Flat 40% OFF on all Bulk & Corporate Orders | Free Pan-India Delivery"
+                  placeholder="e.g. Flat 40% OFF on all Bulk Orders | Free Pan-India Delivery"
                 />
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Field
-                    label="Action Button Label"
+                    label="Link Button Text (optional)"
                     value={offerStrip.linkLabel}
                     onChange={(v) => setOfferStrip({ ...offerStrip, linkLabel: v })}
-                    placeholder="e.g. Claim Discount"
+                    placeholder="e.g. Order Now, Shop Deals"
                   />
                   <Field
-                    label="Action Button Link"
+                    label="Link Target URL"
                     value={offerStrip.linkTarget}
                     onChange={(v) => setOfferStrip({ ...offerStrip, linkTarget: v })}
-                    placeholder="e.g. /products or /bulk-enquiry"
+                    placeholder="/products or https://..."
                   />
                 </div>
               </div>
 
               <SaveButton onClick={saveOfferStrip} label="Save Announcement Strip" />
             </div>
-          ) : activeTab === 'trust' ? (
-            /* TAB 4: TRUST STRIP */
-            <div className="space-y-6 max-w-3xl">
+          ) : activeTab === 'categories' ? (
+            /* TAB 4: CATEGORY TILES (VISUAL CATEGORIES) */
+            <div className="space-y-6 max-w-4xl">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-lg font-bold text-[var(--text-main)]">Trust Strip Badges</h2>
+                  <h2 className="text-lg font-bold text-[var(--text-main)]">Homepage Category Tiles</h2>
                   <p className="text-xs text-[var(--text-muted)] mt-0.5">
-                    The 4 value pillars rendered directly under the hero banner. Customize promises and icons.
+                    Customize the 2-block square visual category tiles (Business Essentials, Custom Apparel, etc.) on the homepage.
                   </p>
                 </div>
                 <button
-                  onClick={addTrustItem}
+                  onClick={addBlock}
                   className="px-4 py-2 neu-flat text-[var(--text-main)] font-bold text-xs rounded-lg transition-colors flex items-center gap-2 cursor-pointer"
                 >
-                  <Plus className="w-3.5 h-3.5 text-[#0082CA]" /> Add Badge
+                  <Plus className="w-3.5 h-3.5 text-[#0082CA]" /> Add Category Block
+                </button>
+              </div>
+
+              <div className="space-y-8">
+                {categoryBlocks.map((block, bi) => (
+                  <div key={bi} className="neu-flat rounded-2xl p-6 space-y-5 border border-[var(--border)]">
+                    <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
+                      <div className="flex-1 max-w-md">
+                        <Field
+                          label={`Block ${bi + 1} Heading`}
+                          value={block.title}
+                          onChange={(v) => updateBlockTitle(bi, v)}
+                          placeholder="e.g. Business Essentials"
+                        />
+                      </div>
+                      <div className="flex items-center gap-3 pt-4">
+                        <button
+                          onClick={() => addTile(bi)}
+                          className="px-3 py-1.5 neu-flat text-xs font-bold text-[#0082CA] rounded-lg flex items-center gap-1 cursor-pointer"
+                        >
+                          <Plus className="w-3 h-3" /> Add Tile
+                        </button>
+                        <button
+                          onClick={() => removeBlock(bi)}
+                          className="p-1.5 text-[var(--text-faint)] hover:text-rose-600 rounded-lg cursor-pointer"
+                          title="Delete Block"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {(block.tiles || []).map((tile, ti) => (
+                        <div key={ti} className="neu-flat rounded-xl p-4 space-y-3 relative group">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-bold text-[var(--text-muted)] uppercase">Tile #{ti + 1}</span>
+                            <div className="flex items-center gap-2">
+                              <label className="text-[11px] font-semibold text-[var(--text-muted)] flex items-center gap-1">
+                                <input
+                                  type="checkbox"
+                                  checked={tile.isActive !== false}
+                                  onChange={(e) => updateTile(bi, ti, 'isActive', e.target.checked)}
+                                  className="accent-[#0082CA] rounded"
+                                />
+                                Active
+                              </label>
+                              <button
+                                onClick={() => removeTile(bi, ti)}
+                                className="text-[var(--text-faint)] hover:text-rose-600 p-1 cursor-pointer"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </div>
+
+                          <Field
+                            label="Tile Title / Label"
+                            value={tile.name}
+                            onChange={(v) => updateTile(bi, ti, 'name', v)}
+                            placeholder="e.g. Visiting Cards"
+                          />
+
+                          <ImageField
+                            label="Tile Image"
+                            value={tile.img}
+                            onChange={(v) => updateTile(bi, ti, 'img', v)}
+                            placeholder="https://res.cloudinary.com/... or upload"
+                          />
+
+                          <Field
+                            label="Target URL"
+                            value={tile.link}
+                            onChange={(v) => updateTile(bi, ti, 'link', v)}
+                            placeholder="/visiting-cards or /products?search=..."
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <SaveButton onClick={saveCategoryTiles} label="Save Category Tiles" />
+            </div>
+          ) : activeTab === 'headings' ? (
+            /* TAB 5: HOME SECTION HEADINGS */
+            <div className="space-y-6 max-w-3xl">
+              <div>
+                <h2 className="text-lg font-bold text-[var(--text-main)]">Home Section Headings</h2>
+                <p className="text-xs text-[var(--text-muted)] mt-0.5">
+                  Customize the titles and subtitles rendered above each major storefront product section on the homepage.
+                </p>
+              </div>
+
+              <div className="neu-flat rounded-xl p-6 space-y-6">
+                {/* Best Sellers */}
+                <div className="space-y-3">
+                  <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#0082CA]">Best Sellers Section</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Field
+                      label="Section Title"
+                      value={homeHeadings.bestSellersTitle}
+                      onChange={(v) => setHomeHeadings({ ...homeHeadings, bestSellersTitle: v })}
+                      placeholder="Best Selling Products"
+                    />
+                    <Field
+                      label="Section Subtitle"
+                      value={homeHeadings.bestSellersSubtitle}
+                      onChange={(v) => setHomeHeadings({ ...homeHeadings, bestSellersSubtitle: v })}
+                      placeholder="Most ordered commercial print and merchandise products"
+                    />
+                  </div>
+                </div>
+
+                {/* New Arrivals */}
+                <div className="space-y-3 pt-4 border-t border-[var(--border)]">
+                  <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#0082CA]">New Arrivals Section</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Field
+                      label="Section Title"
+                      value={homeHeadings.newArrivalsTitle}
+                      onChange={(v) => setHomeHeadings({ ...homeHeadings, newArrivalsTitle: v })}
+                      placeholder="New Arrivals & Fresh Templates"
+                    />
+                    <Field
+                      label="Section Subtitle"
+                      value={homeHeadings.newArrivalsSubtitle}
+                      onChange={(v) => setHomeHeadings({ ...homeHeadings, newArrivalsSubtitle: v })}
+                      placeholder="Fresh new templates and products"
+                    />
+                  </div>
+                </div>
+
+                {/* Corporate Essentials */}
+                <div className="space-y-3 pt-4 border-t border-[var(--border)]">
+                  <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#0082CA]">Corporate & Business Printing</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Field
+                      label="Section Title"
+                      value={homeHeadings.corporateTitle}
+                      onChange={(v) => setHomeHeadings({ ...homeHeadings, corporateTitle: v })}
+                      placeholder="Corporate Essentials & Gifting"
+                    />
+                    <Field
+                      label="Section Subtitle"
+                      value={homeHeadings.corporateSubtitle}
+                      onChange={(v) => setHomeHeadings({ ...homeHeadings, corporateSubtitle: v })}
+                      placeholder="Bulk corporate solutions with custom GST invoicing"
+                    />
+                  </div>
+                </div>
+
+                {/* Trending Products */}
+                <div className="space-y-3 pt-4 border-t border-[var(--border)]">
+                  <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#0082CA]">Trending / Top Rated Section</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Field
+                      label="Section Title"
+                      value={homeHeadings.trendingTitle}
+                      onChange={(v) => setHomeHeadings({ ...homeHeadings, trendingTitle: v })}
+                      placeholder="Trending Print Catalogue"
+                    />
+                    <Field
+                      label="Section Subtitle"
+                      value={homeHeadings.trendingSubtitle}
+                      onChange={(v) => setHomeHeadings({ ...homeHeadings, trendingSubtitle: v })}
+                      placeholder="Top rated commercial solutions popular this month"
+                    />
+                  </div>
+                </div>
+
+                {/* Popular Searches */}
+                <div className="space-y-3 pt-4 border-t border-[var(--border)]">
+                  <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#0082CA]">Popular Searches Bar</h3>
+                  <Field
+                    label="Section Title"
+                    value={homeHeadings.popularSearchesTitle}
+                    onChange={(v) => setHomeHeadings({ ...homeHeadings, popularSearchesTitle: v })}
+                    placeholder="Popular Searches"
+                  />
+                </div>
+              </div>
+
+              <SaveButton onClick={saveHeadings} label="Save Section Headings" />
+            </div>
+          ) : activeTab === 'trust' ? (
+            /* TAB 6: TRUST STRIP */
+            <div className="space-y-6 max-w-3xl">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-lg font-bold text-[var(--text-main)]">Trust Strip (Value Pillars)</h2>
+                  <p className="text-xs text-[var(--text-muted)] mt-0.5">
+                    The 4 icons and value statements that appear below the hero banner.
+                  </p>
+                </div>
+                <button
+                  onClick={addTrust}
+                  className="px-4 py-2 neu-flat text-[var(--text-main)] font-bold text-xs rounded-lg transition-colors flex items-center gap-2 cursor-pointer"
+                >
+                  <Plus className="w-3.5 h-3.5 text-[#0082CA]" /> Add Item
                 </button>
               </div>
 
               <div className="space-y-4">
                 {trustItems.map((item, index) => (
-                  <div key={index} className="neu-flat rounded-xl p-4 flex gap-4 items-start group">
-                    <div className="pt-2 text-[var(--text-faint)]">
-                      <span className="text-xs font-bold text-[var(--text-faint)]">#{index + 1}</span>
+                  <div key={index} className="neu-flat rounded-xl p-5 space-y-4 group">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-extrabold text-[var(--text-muted)] uppercase tracking-wider">
+                        Pillar #{index + 1}
+                      </span>
+                      <div className="flex items-center gap-3">
+                        <label className="text-xs font-semibold text-[var(--text-muted)] flex items-center gap-1.5 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={Boolean(item.isActive !== false)}
+                            onChange={(e) => updateTrust(index, 'isActive', e.target.checked)}
+                            className="accent-[#0082CA] rounded cursor-pointer"
+                          />
+                          Active
+                        </label>
+                        <button
+                          onClick={() => removeTrust(index)}
+                          className="text-[var(--text-faint)] hover:text-rose-600 p-1 cursor-pointer"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
-                    <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-3">
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div>
                         <label className="block text-xs font-bold text-[var(--text-main)] mb-1.5">Icon</label>
                         <select
                           value={item.icon || 'ShieldCheck'}
-                          onChange={(e) => updateTrustItem(index, 'icon', e.target.value)}
+                          onChange={(e) => updateTrust(index, 'icon', e.target.value)}
                           className="w-full px-3 py-2 neu-flat rounded-lg focus:ring-2 focus:ring-[var(--border-strong)] focus:border-[var(--text-main)] outline-none text-sm text-[var(--text-main)] bg-[var(--bg-card)]"
                         >
-                          {ICON_OPTIONS.map((ico) => (
-                            <option key={ico} value={ico}>
-                              {ico}
+                          {ICON_OPTIONS.map((opt) => (
+                            <option key={opt} value={opt}>
+                              {opt}
                             </option>
                           ))}
                         </select>
                       </div>
-                      <div>
+                      <div className="md:col-span-2">
                         <Field
-                          label="Badge Title"
+                          label="Title"
                           value={item.title}
-                          onChange={(v) => updateTrustItem(index, 'title', v)}
+                          onChange={(v) => updateTrust(index, 'title', v)}
                           placeholder="e.g. Precision Colors"
                         />
                       </div>
-                      <div>
-                        <Field
-                          label="Description"
-                          value={item.description}
-                          onChange={(v) => updateTrustItem(index, 'description', v)}
-                          placeholder="e.g. CMYK calibrated offset"
-                        />
-                      </div>
                     </div>
-                    <button
-                      onClick={() => removeTrustItem(index)}
-                      className="p-2 h-fit text-[var(--text-faint)] hover:text-rose-600 neu-flat rounded-lg transition-colors mt-6 opacity-0 group-hover:opacity-100 cursor-pointer"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+
+                    <Field
+                      label="Short Description"
+                      value={item.description}
+                      onChange={(v) => updateTrust(index, 'description', v)}
+                      placeholder="e.g. CMYK calibrated offset & digital machines"
+                    />
                   </div>
                 ))}
               </div>
@@ -814,13 +1248,13 @@ export default function CMSPage() {
               <SaveButton onClick={saveTrustStrip} label="Save Trust Strip" />
             </div>
           ) : activeTab === 'faq' ? (
-            /* TAB 5: FAQ MANAGER */
+            /* TAB 7: FAQ MANAGER */
             <div className="space-y-6 max-w-3xl">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-lg font-bold text-[var(--text-main)]">FAQ Manager</h2>
                   <p className="text-xs text-[var(--text-muted)] mt-0.5">
-                    Manages question/answer pairs on the homepage and support page. Feeds Google SEO structured data.
+                    Manage the accordion questions on the homepage. Drag reorder or use arrows.
                   </p>
                 </div>
                 <button
@@ -833,109 +1267,113 @@ export default function CMSPage() {
 
               <div className="space-y-4">
                 {faqs.map((faq, index) => (
-                  <div key={index} className="neu-flat rounded-xl p-4 flex gap-4 group">
-                    <div className="flex flex-col items-center gap-1 pt-2">
-                      <button
-                        onClick={() => moveFaq(index, -1)}
-                        disabled={index === 0}
-                        className="p-1 text-[var(--text-faint)] hover:text-[var(--text-main)] disabled:opacity-30 cursor-pointer"
-                        title="Move Up"
-                      >
-                        <ChevronUp className="w-4 h-4" />
-                      </button>
-                      <span className="text-[11px] font-bold text-[var(--text-muted)]">{index + 1}</span>
-                      <button
-                        onClick={() => moveFaq(index, 1)}
-                        disabled={index === faqs.length - 1}
-                        className="p-1 text-[var(--text-faint)] hover:text-[var(--text-main)] disabled:opacity-30 cursor-pointer"
-                        title="Move Down"
-                      >
-                        <ChevronDown className="w-4 h-4" />
-                      </button>
-                    </div>
-
-                    <div className="flex-1 space-y-3">
-                      <Field
-                        label="Question"
-                        value={faq.question}
-                        onChange={(v) => updateFaq(index, 'question', v)}
-                        placeholder="e.g. Can I order single-piece prints?"
-                      />
-                      <TextAreaField
-                        label="Answer"
-                        value={faq.answer}
-                        onChange={(v) => updateFaq(index, 'answer', v)}
-                        rows={3}
-                        placeholder="Clear, helpful response for customers..."
-                      />
+                  <div key={index} className="neu-flat rounded-xl p-5 space-y-3 group">
+                    <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          id={`faq-active-${index}`}
-                          checked={faq.isActive !== false}
-                          onChange={(e) => updateFaq(index, 'isActive', e.target.checked)}
-                          className="rounded"
-                        />
-                        <label htmlFor={`faq-active-${index}`} className="text-xs font-semibold text-[var(--text-muted)] cursor-pointer">
-                          Active on Storefront
+                        <span className="text-xs font-extrabold text-[var(--text-muted)] uppercase tracking-wider">
+                          Q{index + 1}
+                        </span>
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            disabled={index === 0}
+                            onClick={() => moveFaq(index, -1)}
+                            className="p-1 text-[var(--text-faint)] hover:text-[var(--text-main)] disabled:opacity-30 cursor-pointer"
+                            title="Move Up"
+                          >
+                            <ChevronUp className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            disabled={index === faqs.length - 1}
+                            onClick={() => moveFaq(index, 1)}
+                            className="p-1 text-[var(--text-faint)] hover:text-[var(--text-main)] disabled:opacity-30 cursor-pointer"
+                            title="Move Down"
+                          >
+                            <ChevronDown className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <label className="text-xs font-semibold text-[var(--text-muted)] flex items-center gap-1.5 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={Boolean(faq.isActive !== false)}
+                            onChange={(e) => updateFaq(index, 'isActive', e.target.checked)}
+                            className="accent-[#0082CA] rounded cursor-pointer"
+                          />
+                          Active
                         </label>
+                        <button
+                          onClick={() => removeFaq(index)}
+                          className="text-[var(--text-faint)] hover:text-rose-600 p-1 cursor-pointer"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       </div>
                     </div>
 
-                    <button
-                      onClick={() => removeFaq(index)}
-                      className="p-2 h-fit text-[var(--text-faint)] hover:text-rose-600 neu-flat rounded-lg transition-colors mt-2 opacity-0 group-hover:opacity-100 cursor-pointer"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                    <Field
+                      label="Question"
+                      value={faq.question}
+                      onChange={(v) => updateFaq(index, 'question', v)}
+                      placeholder="e.g. Can I order single pieces?"
+                    />
+
+                    <TextAreaField
+                      label="Answer"
+                      value={faq.answer}
+                      onChange={(v) => updateFaq(index, 'answer', v)}
+                      placeholder="Detailed answer text..."
+                      rows={3}
+                    />
                   </div>
                 ))}
               </div>
 
-              <SaveButton onClick={saveFaqs} label="Save FAQ Content" />
+              <SaveButton onClick={saveFaqs} label="Save FAQs" />
             </div>
           ) : activeTab === 'contact' ? (
-            /* TAB 6: CONTACT DETAILS */
+            /* TAB 8: CONTACT DETAILS */
             <div className="space-y-6 max-w-3xl">
               <div>
-                <h2 className="text-lg font-bold text-[var(--text-main)]">Store Contact Details</h2>
+                <h2 className="text-lg font-bold text-[var(--text-main)]">Store Contact Information</h2>
                 <p className="text-xs text-[var(--text-muted)] mt-0.5">
-                  Universal contact and business details shown across the Footer, Support page, and Order assistance.
+                  Shared across Footer, Support Desk, Header mobile drawer, and customer notification receipts.
                 </p>
               </div>
 
               <div className="neu-flat rounded-xl p-6 space-y-5">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">Direct Hotline & Channels</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Field
-                    label="Support Hotline (Phone)"
+                    label="Customer Support Helpline (Calling)"
                     value={contactInfo.supportPhone}
                     onChange={(v) => setContactInfo({ ...contactInfo, supportPhone: v })}
                     placeholder="+91 7700054984"
                   />
                   <Field
-                    label="WhatsApp Assistance"
+                    label="WhatsApp Assistance Number"
                     value={contactInfo.whatsappNumber}
                     onChange={(v) => setContactInfo({ ...contactInfo, whatsappNumber: v })}
                     placeholder="+91 7700054984"
                   />
                   <Field
-                    label="Official Support Email"
+                    label="Support Email"
                     value={contactInfo.supportEmail}
                     onChange={(v) => setContactInfo({ ...contactInfo, supportEmail: v })}
                     placeholder="imagemazaprintwala@gmail.com"
                   />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
                   <Field
-                    label="Business Operating Hours"
+                    label="Working Hours Notice"
                     value={contactInfo.workingHours}
                     onChange={(v) => setContactInfo({ ...contactInfo, workingHours: v })}
                     placeholder="Mon - Sat: 10:00 AM - 7:00 PM"
                   />
+                </div>
+
+                <div>
                   <Field
-                    label="GSTIN / Business Registration"
+                    label="GSTIN Number (for corporate billing)"
                     value={contactInfo.gstin}
                     onChange={(v) => setContactInfo({ ...contactInfo, gstin: v })}
                     placeholder="27AAAAA0000A1Z5"
@@ -984,15 +1422,57 @@ export default function CMSPage() {
               <SaveButton onClick={saveContactInfo} label="Save Contact Details" />
             </div>
           ) : activeTab === 'footer' ? (
-            /* TAB 7: FOOTER LINKS */
+            /* TAB 9: FOOTER LINKS & PAYMENT STRIP */
             <div className="space-y-6 max-w-3xl">
               <div>
-                <h2 className="text-lg font-bold text-[var(--text-main)]">Footer Links & Policies</h2>
+                <h2 className="text-lg font-bold text-[var(--text-main)]">Footer Links & Payment Badges</h2>
                 <p className="text-xs text-[var(--text-muted)] mt-0.5">
-                  Every field here is optional. Anything you leave blank keeps the storefront built-in fallback.
+                  Configure footer navigation columns, social URLs, and checkout trust payment badges.
                 </p>
               </div>
 
+              {/* Payment Strip Badges */}
+              <div className="neu-flat rounded-xl p-6 space-y-4">
+                <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
+                  <div>
+                    <h3 className="text-sm font-bold text-[var(--text-main)]">Payment Strip Badges</h3>
+                    <p className="text-xs text-[var(--text-muted)]">Toggle payment brand logos displayed at the footer bottom.</p>
+                  </div>
+                  <label className="text-xs font-bold text-[var(--text-main)] flex items-center gap-1.5 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={Boolean(payments.enabled !== false)}
+                      onChange={(e) => setPayments({ ...payments, enabled: e.target.checked })}
+                      className="accent-[#0082CA] rounded cursor-pointer"
+                    />
+                    Display Payment Strip
+                  </label>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
+                  {(payments.badges || []).map((badge) => (
+                    <label
+                      key={badge.id}
+                      onClick={() => togglePaymentBadge(badge.id)}
+                      className={`p-3 neu-flat rounded-xl border flex items-center gap-2.5 cursor-pointer transition-all ${
+                        badge.enabled
+                          ? 'border-[#0082CA] bg-[#0082CA]/5 text-[var(--text-main)] font-bold'
+                          : 'border-[var(--border)] opacity-60 text-[var(--text-muted)]'
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={Boolean(badge.enabled)}
+                        readOnly
+                        className="accent-[#0082CA] rounded"
+                      />
+                      <span className="text-xs font-bold">{badge.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Footer Links & Social */}
               <div className="neu-flat rounded-xl p-6 space-y-4">
                 <TextAreaField
                   label="Brand Tagline"
@@ -1086,10 +1566,10 @@ export default function CMSPage() {
                 </div>
               ))}
 
-              <SaveButton onClick={saveFooter} label="Save Footer Links" />
+              <SaveButton onClick={saveFooter} label="Save Footer & Payment Badges" />
             </div>
           ) : (
-            /* TAB 8: POLICIES & LEGAL */
+            /* TAB 10: POLICIES & LEGAL */
             <div className="space-y-6 max-w-3xl">
               <div>
                 <h2 className="text-lg font-bold text-[var(--text-main)]">Legal & Store Policies</h2>
